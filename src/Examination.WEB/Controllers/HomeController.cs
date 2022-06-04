@@ -22,17 +22,26 @@ namespace Examination.WEB.Controllers
             _db = new ExaminationData(new ExaminationContext());
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
+        [HttpGet]
         public IActionResult Tests()
         {
             var model = _db.GetTestsWithAnswers();
             return View(model);
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult Admin() 
+        {
+            var model = _db.GetTestsWithAnswers();
+            return View(model);
+        }
+
+        public IActionResult CreateTest() 
         {
             return View();
         }
