@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Examination.Data.Services
 {
-    interface IExaminationData
+    public interface IExaminationData
     {
         IEnumerable<Test> GetTests();
     }

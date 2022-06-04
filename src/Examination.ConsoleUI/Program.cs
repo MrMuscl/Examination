@@ -7,7 +7,6 @@ namespace Examination.ConsoleUI
 {
     class Program
     {
-
         static ExaminationContext dbContext = new ExaminationContext();
         static void Main(string[] args)
         {

@@ -9,9 +9,15 @@ namespace Examination.Data.Services
 {
     public class ExaminationData : IExaminationData
     {
+        ExaminationContext _db;
+
+        public ExaminationData(ExaminationContext db)
+        {
+            _db = db;
+        }
         public IEnumerable<Test> GetTests()
         {
-            throw new NotImplementedException();
+            return _db.Tests.Select(t => t).ToList();
         }
     }
 }
