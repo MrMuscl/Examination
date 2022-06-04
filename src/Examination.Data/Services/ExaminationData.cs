@@ -1,4 +1,5 @@
 ﻿using Examination.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,13 @@ namespace Examination.Data.Services
         public IEnumerable<Test> GetTests()
         {
             return _db.Tests.Select(t => t).ToList();
+        }
+
+        public IEnumerable<Test> GetTestsWithAnswers()
+        {
+            return _db.Tests.Select(t => t)
+                .Include(t => t.TestQuestions)
+                .ToList();
         }
     }
 }

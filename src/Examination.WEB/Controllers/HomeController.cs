@@ -28,7 +28,7 @@ namespace Examination.WEB.Controllers
         }
         public IActionResult Tests()
         {
-            var model = _db.GetTests();
+            var model = _db.GetTestsWithAnswers();
             return View(model);
         }
 

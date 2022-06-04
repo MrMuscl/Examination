@@ -10,5 +10,6 @@ namespace Examination.Data.Services
     public interface IExaminationData
     {
         IEnumerable<Test> GetTests();
+        IEnumerable<Test> GetTestsWithAnswers();
     }
 }

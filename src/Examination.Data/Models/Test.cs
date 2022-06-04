@@ -14,7 +14,7 @@ namespace Examination.Data.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? Difficalty { get; set; }
+        public int? Difficulty { get; set; }
 
         public virtual ICollection<TestQuestion> TestQuestions { get; set; }
     }
