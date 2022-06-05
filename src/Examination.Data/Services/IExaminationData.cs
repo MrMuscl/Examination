@@ -11,5 +11,6 @@ namespace Examination.Data.Services
     {
         IEnumerable<Test> GetTests();
         IEnumerable<Test> GetTestsWithAnswers();
+        void AddTest(Test test);
     }
 }

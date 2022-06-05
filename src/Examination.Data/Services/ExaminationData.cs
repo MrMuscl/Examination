@@ -16,6 +16,20 @@ namespace Examination.Data.Services
         {
             _db = db;
         }
+
+        public void AddTest(Test test)
+        {
+            if (test == null)
+            {
+                throw new ArgumentNullException("test");
+            }
+            else 
+            {
+                _db.Tests.Add(test);
+                _db.SaveChanges();
+            }
+        }
+
         public IEnumerable<Test> GetTests()
         {
             return _db.Tests.Select(t => t).ToList();

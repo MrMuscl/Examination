@@ -4,6 +4,8 @@
     ViewData["Title"] = "CreateTest";
 }
 
+@using Examination.Data.Models;
+
 <h1>Create new test</h1>
 
 <h4>Test</h4>
@@ -19,9 +21,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Difficulty" class="control-label"></label>
-                <input asp-for="Difficulty" class="form-control" />
+                <select asp-for="Difficulty" class="form-control" asp-items="Html.GetEnumSelectList<TestDifficulty>()"></select>
                 <span asp-validation-for="Difficulty" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="CreateTest" class="btn btn-primary" />
             </div>

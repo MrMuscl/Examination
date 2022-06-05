@@ -40,9 +40,22 @@ namespace Examination.WEB.Controllers
             var model = _db.GetTestsWithAnswers();
             return View(model);
         }
-
+        [HttpGet]
         public IActionResult CreateTest() 
         {
+            return View();
+        }
+        
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult CreateTest(Test test)
+        {
+            if (ModelState.IsValid) 
+            {
+                _db.AddTest(test);
+                return RedirectToAction("Admin");
+            }
+            
             return View();
         }
 
