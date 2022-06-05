@@ -67,7 +67,6 @@ namespace Examination.Data.Models
                 entity.ToTable("Test");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.Name)
