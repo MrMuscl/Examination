@@ -30,6 +30,22 @@ namespace Examination.Data.Services
             }
         }
 
+        public void DeleteTest(int id)
+        {
+            var test = GetTest(id);
+            if (test != null)
+            {
+                _db.Tests.Remove(test);
+                _db.SaveChanges();
+            }
+
+        }
+
+        public Test GetTest(int id)
+        {
+            return _db.Tests.Find(id);
+        }
+
         public IEnumerable<Test> GetTests()
         {
             return _db.Tests.Select(t => t).ToList();
