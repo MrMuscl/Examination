@@ -37,7 +37,6 @@ namespace Examination.Data.Models
                 entity.ToTable("Answer");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
@@ -47,7 +46,7 @@ namespace Examination.Data.Models
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Answers)
                     .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Answer_Question");
             });
 
@@ -56,7 +55,6 @@ namespace Examination.Data.Models
                 entity.ToTable("Question");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.Text).HasColumnType("text");
@@ -77,7 +75,6 @@ namespace Examination.Data.Models
             modelBuilder.Entity<TestQuestion>(entity =>
             {
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
@@ -87,13 +84,13 @@ namespace Examination.Data.Models
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.TestQuestions)
                     .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_TestQuestions_Question");
 
                 entity.HasOne(d => d.Test)
                     .WithMany(p => p.TestQuestions)
                     .HasForeignKey(d => d.TestId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_TestQuestions_Test");
             });
 
