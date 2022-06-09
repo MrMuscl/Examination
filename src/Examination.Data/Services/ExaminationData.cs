@@ -48,14 +48,38 @@ namespace Examination.Data.Services
 
         public IEnumerable<Test> GetTests()
         {
-            return _db.Tests.Select(t => t).ToList();
+            return _db.Tests.Select(t => t).Include(t => t.TestQuestions).ToList();
         }
 
-        public IEnumerable<Test> GetTestsWithAnswers()
+        public void UpdateTest(Test test) 
         {
-            return _db.Tests.Select(t => t)
-                .Include(t => t.TestQuestions)
-                .ToList();
+            var entry = _db.Entry(test);
+            entry.State = EntityState.Modified;
+            _db.SaveChanges();
+        }
+
+        //public IEnumerable<string> GetQuestionTextForTest(int id)
+        //{
+        //    var questions = _db.Questions.Join(_db.TestQuestions,
+        //                                        quest => quest.Id,
+        //                                        qt => qt.QuestionId,
+        //                                        (quest, qt) =>
+        //                                        new { QuestionText = quest.Text, TestId = qt.TestId }).Where(qt => qt.TestId == id).ToList();
+        //    var res = new List<string>();
+        //    foreach (var itm in questions)
+        //        res.Add(itm.QuestionText);
+
+        //    return res;
+        //}
+
+        public IEnumerable<Question> GetQuestionsForTest(int id)
+        {
+            var questions = _db.TestQuestions
+                .Include(tq => tq.Question)
+                .Where(tq => tq.TestId == 1)
+                .Select(tq => tq.Question).ToList();
+
+            return questions;
         }
     }
 }

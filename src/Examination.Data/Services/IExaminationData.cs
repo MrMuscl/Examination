@@ -14,31 +14,38 @@ namespace Examination.Data.Services
         /// </summary>
         /// <returns>The collection of tests</returns>
         IEnumerable<Test> GetTests();
-        
+
         /// <summary>
-        /// Get all test objects with all related questions.
-        /// </summary>
-        /// <returns>The collection of tests</returns>
-        IEnumerable<Test> GetTestsWithAnswers();
-        
-        /// <summary>
-        /// Add test 
-        /// </summary>
-        /// <param name="test">Test object that should be added</param>
-        void AddTest(Test test);
-        
-        /// <summary>
-        /// Get test with scpecified id
+        /// Get test with specified id
         /// </summary>
         /// <param name="">Test id</param>
         /// <returns>Test object </returns>
         Test GetTest(int id);
 
         /// <summary>
+        /// Add test 
+        /// </summary>
+        /// <param name="test">Test object that should be added</param>
+        void AddTest(Test test);
+
+        /// <summary>
+        /// Get questions for specified test
+        /// </summary>
+        /// <param name="id">Test id</param>
+        /// <returns>The collection of question objects</returns>
+        IEnumerable<Question> GetQuestionsForTest(int id);
+
+        /// <summary>
         /// Delete test with specified id
         /// </summary>
         /// <param name="id">Test id</param>
         void DeleteTest(int id);
+
+        /// <summary>
+        /// Updated test with new object
+        /// </summary>
+        /// <param name="id">Test object</param>
+        void UpdateTest(Test test);
         
             
         

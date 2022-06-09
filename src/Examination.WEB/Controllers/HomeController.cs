@@ -31,14 +31,14 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Tests()
         {
-            var model = _db.GetTestsWithAnswers();
+            var model = _db.GetTests();
             return View(model);
         }
 
         [HttpGet]
         public IActionResult Admin()
         {
-            var model = _db.GetTestsWithAnswers();
+            var model = _db.GetTests();
             return View(model);
         }
         [HttpGet]
@@ -73,10 +73,57 @@ namespace Examination.WEB.Controllers
             return RedirectToAction("Admin");
         }
 
+        [HttpGet]
+        public IActionResult EditTest(int id) 
+        {
+            var model = _db.GetTest(id);
+            ViewBag.QuestionsList = _db.GetQuestionsForTest(id);
+            ViewData["Message"] = "msg11";
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditTest(Test test) 
+        {
+            if (ModelState.IsValid) 
+            {
+                
+                _db.UpdateTest(test);                
+            }
+            return RedirectToAction("Admin");
+        }
+
+        [HttpGet]
+        public IActionResult Questions(int id) 
+        {
+            var test = _db.GetTest(id);
+            var model = _db.GetQuestionsForTest(id);
+            ViewBag.Test = test;
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult CreateQuestion(int id) 
+        {
+            var test = _db.GetTest(id);
+            ViewBag.Test = test;
+            return View();
+        }
+
+        public IActionResult CreateQuestion(Question question) 
+        {
+            return RedirectToAction("Index");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var errorModel = new ErrorViewModel();
+            errorModel.RequestId = "666";
+            errorModel.Message = "Hell yeah!";
+            return View(errorModel);
         }
     }
 }
