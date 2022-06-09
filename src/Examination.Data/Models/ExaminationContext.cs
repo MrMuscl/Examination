@@ -80,8 +80,8 @@ namespace Examination.Data.Models
 
             modelBuilder.Entity<TestQuestion>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID");
+                entity.HasKey(e => new { e.TestId, e.QuestionId })
+                .HasName("PK_TestQuestions");
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
