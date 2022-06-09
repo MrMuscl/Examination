@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
 
 #nullable disable
 
@@ -26,7 +27,12 @@ namespace Examination.Data.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("data source=ANTONK-573;Initial Catalog=Examination2;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("data source=ANTONK-573;Initial Catalog=Examination2;Integrated Security=True;")
+                    .LogTo(Console.WriteLine,
+                        new[] { DbLoggerCategory.Database.Command.Name,
+                                DbLoggerCategory.Database.Transaction.Name},
+                        LogLevel.Debug).EnableSensitiveDataLogging();
+
             }
         }
 
