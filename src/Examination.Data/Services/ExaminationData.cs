@@ -76,10 +76,18 @@ namespace Examination.Data.Services
         {
             var questions = _db.TestQuestions
                 .Include(tq => tq.Question)
-                .Where(tq => tq.TestId == 1)
+                .Where(tq => tq.TestId == id)
                 .Select(tq => tq.Question).ToList();
 
             return questions;
+        }
+
+        public void AddQuestionToTest(Question question, int testId)
+        {
+            var test = GetTest(testId);
+            var qt = new TestQuestion { Test = test, Question = question };
+            _db.TestQuestions.Add(qt);
+            _db.SaveChanges();
         }
     }
 }

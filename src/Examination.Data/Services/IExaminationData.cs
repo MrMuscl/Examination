@@ -46,7 +46,13 @@ namespace Examination.Data.Services
         /// </summary>
         /// <param name="id">Test object</param>
         void UpdateTest(Test test);
-        
+
+        /// <summary>
+        /// Add new question to specified test
+        /// </summary>
+        /// <param name="question">Question object</param>
+        /// <param name="testId">Test id the question should be added to</param>
+        void AddQuestionToTest(Question question, int testId);
             
         
     }
