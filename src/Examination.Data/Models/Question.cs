@@ -10,13 +10,13 @@ namespace Examination.Data.Models
         public Question()
         {
             Answers = new HashSet<Answer>();
-            TestQuestions = new HashSet<TestQuestion>();
+            Tests = new HashSet<Test>();
         }
 
         public int Id { get; set; }
         public string Text { get; set; }
 
         public virtual ICollection<Answer> Answers { get; set; }
-        public virtual ICollection<TestQuestion> TestQuestions { get; set; }
+        public virtual ICollection<Test> Tests { get; set; }
     }
 }

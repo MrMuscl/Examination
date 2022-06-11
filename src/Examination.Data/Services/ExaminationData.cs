@@ -17,6 +17,8 @@ namespace Examination.Data.Services
             _db = db;
         }
 
+        public bool EnsureDbCreated() => _db.Database.EnsureCreated();
+
         public void AddTest(Test test)
         {
             if (test == null)
@@ -48,7 +50,7 @@ namespace Examination.Data.Services
 
         public IEnumerable<Test> GetTests()
         {
-            return _db.Tests.Select(t => t).Include(t => t.TestQuestions).ToList();
+            return _db.Tests.Select(t => t).Include(t => t.Questions).ToList();
         }
 
         public void UpdateTest(Test test) 
@@ -57,27 +59,13 @@ namespace Examination.Data.Services
             entry.State = EntityState.Modified;
             _db.SaveChanges();
         }
-
-        //public IEnumerable<string> GetQuestionTextForTest(int id)
-        //{
-        //    var questions = _db.Questions.Join(_db.TestQuestions,
-        //                                        quest => quest.Id,
-        //                                        qt => qt.QuestionId,
-        //                                        (quest, qt) =>
-        //                                        new { QuestionText = quest.Text, TestId = qt.TestId }).Where(qt => qt.TestId == id).ToList();
-        //    var res = new List<string>();
-        //    foreach (var itm in questions)
-        //        res.Add(itm.QuestionText);
-
-        //    return res;
-        //}
-
+                
         public IEnumerable<Question> GetQuestionsForTest(int id)
         {
-            var questions = _db.TestQuestions
-                .Include(tq => tq.Question)
-                .Where(tq => tq.TestId == id)
-                .Select(tq => tq.Question).ToList();
+            var questions = _db.Tests.Where(t => t.Id == id)
+                .Include(t => t.Questions)
+                .SingleOrDefault()
+                .Questions;
 
             return questions;
         }
@@ -85,8 +73,8 @@ namespace Examination.Data.Services
         public void AddQuestionToTest(Question question, int testId)
         {
             var test = GetTest(testId);
-            var qt = new TestQuestion { Test = test, Question = question };
-            _db.TestQuestions.Add(qt);
+            test.Questions.Add(question);
+            
             _db.SaveChanges();
         }
     }

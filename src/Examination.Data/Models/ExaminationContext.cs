@@ -9,6 +9,8 @@ namespace Examination.Data.Models
 {
     public partial class ExaminationContext : DbContext
     {
+        const string DATABASE_NAME = "ExaminationCodeFirst";
+        static string _connectionString = $"data source=ANTONK-573;Initial Catalog={DATABASE_NAME};Integrated Security=True;";
         public ExaminationContext()
         {
         }
@@ -21,13 +23,12 @@ namespace Examination.Data.Models
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
-        public virtual DbSet<TestQuestion> TestQuestions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("data source=ANTONK-573;Initial Catalog=Examination2;Integrated Security=True;")
+                optionsBuilder.UseSqlServer(_connectionString)
                     .LogTo(Console.WriteLine,
                         new[] { DbLoggerCategory.Database.Command.Name,
                                 DbLoggerCategory.Database.Transaction.Name},
@@ -76,28 +77,6 @@ namespace Examination.Data.Models
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
                     .IsFixedLength(true);
-            });
-
-            modelBuilder.Entity<TestQuestion>(entity =>
-            {
-                entity.HasKey(e => new { e.TestId, e.QuestionId })
-                .HasName("PK_TestQuestions");
-
-                entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
-
-                entity.Property(e => e.TestId).HasColumnName("TestID");
-
-                entity.HasOne(d => d.Question)
-                    .WithMany(p => p.TestQuestions)
-                    .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_TestQuestions_Question");
-
-                entity.HasOne(d => d.Test)
-                    .WithMany(p => p.TestQuestions)
-                    .HasForeignKey(d => d.TestId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_TestQuestions_Test");
             });
 
             OnModelCreatingPartial(modelBuilder);
