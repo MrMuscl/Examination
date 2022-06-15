@@ -118,5 +118,13 @@ namespace Examination.Data.Services
             _db.Questions.Remove(question);
             _db.SaveChanges();
         }
+
+        public void UpdateQuestion(Question question) 
+        {
+            var entry = _db.Entry(question);
+            entry.State = EntityState.Modified;
+
+            _db.SaveChanges();
+        }
     }
 }

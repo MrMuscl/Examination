@@ -42,7 +42,7 @@ namespace Examination.Data.Services
         void DeleteTest(int id);
 
         /// <summary>
-        /// Updated test with new object
+        /// Update test with new object
         /// </summary>
         /// <param name="id">Test object</param>
         void UpdateTest(Test test);
@@ -73,5 +73,11 @@ namespace Examination.Data.Services
         /// </summary>
         /// <param name="questionId">Id of the question</param>
         void DeleteQuestion(int questionId);
+
+        /// <summary>
+        /// Update question with new object
+        /// </summary>
+        /// <param name="question">Question object</param>
+        void UpdateQuestion(Question question);
      }
 }

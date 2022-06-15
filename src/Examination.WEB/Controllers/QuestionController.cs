@@ -95,5 +95,39 @@ namespace Examination.WEB.Controllers
 
             return RedirectToAction("Index", "Admintest", new { id = testId});
         }
+
+        [HttpGet]
+        public IActionResult Edit(int id, int? testId)
+        {
+            if (testId != null)
+            {
+                ViewBag.TestId = testId.Value;
+            }
+            var model = _db.GetQuestion(id);
+
+            return View(model);
+        }
+
+        public IActionResult Edit(Question question, IFormCollection form)
+        {
+            StringValues value;
+            int testId;
+
+            if (!form.TryGetValue("TestId", out value))
+            {
+                // TODO: handle errors.
+                return null; // NotFoundObjectResult;
+            }
+
+            if (!int.TryParse(value.ToString(), out testId))
+            {
+                // TODO: handle errors.
+                return null; // NotFoundObjectResult;
+            }
+
+            _db.UpdateQuestion(question);
+
+            return RedirectToAction("Index", "AdminTest", new { id = testId });
+        }
     }
 }
