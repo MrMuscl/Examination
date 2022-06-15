@@ -67,7 +67,11 @@ namespace Examination.Data.Services
         /// <param name="answer">Answer object</param>
         /// <param name="questionId">Question id the answer should be added to</param>
         void AddNewAnswerToQuestion(Answer answer, int questionId);
-            
-        
-    }
+
+        /// <summary>
+        /// Remove question enity with all related answers
+        /// </summary>
+        /// <param name="questionId">Id of the question</param>
+        void DeleteQuestion(int questionId);
+     }
 }

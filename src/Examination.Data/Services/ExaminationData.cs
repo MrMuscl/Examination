@@ -107,5 +107,16 @@ namespace Examination.Data.Services
 
             _db.SaveChanges();
         }
+
+        public void DeleteQuestion(int questionId) 
+        {
+            var question = _db.Questions
+                .Include(q => q.Answers).
+                Where(q => q.Id == questionId).
+                SingleOrDefault();
+            
+            _db.Questions.Remove(question);
+            _db.SaveChanges();
+        }
     }
 }

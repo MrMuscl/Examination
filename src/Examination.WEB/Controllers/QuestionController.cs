@@ -47,5 +47,53 @@ namespace Examination.WEB.Controllers
             _db.AddNewQuestionToTest(question, testId);
             return RedirectToAction("Index", "AdminTest", new { Id = testId });
         }
+
+        [HttpGet]
+        public IActionResult Remove(int id, int? testId) 
+        {
+            var model = _db.GetQuestion(id);
+            if (testId != null) 
+            {
+                ViewBag.TestId = testId.Value;
+            }
+
+            ViewBag.QuestionId = id;
+            return View(model);
+        }
+        
+        [HttpPost]
+        public IActionResult Remove(Question question, IFormCollection form) 
+        {
+            int questionId, testId;
+            StringValues qValue, tValue;
+
+            if (!form.TryGetValue("QuestionId", out qValue))
+            {
+                // TODO: handle errors.
+                return null; // NotFoundObjectResult;
+            }
+
+            if (!form.TryGetValue("TestId", out tValue))
+            {
+                // TODO: handle errors.
+                return null; // NotFoundObjectResult;
+            }
+
+            if (!int.TryParse(qValue.ToString(), out questionId))
+            {
+                // TODO: handle errors.
+                return null; // NotFoundObjectResult;
+            }
+
+            if (!int.TryParse(tValue.ToString(), out testId))
+            {
+                // TODO: handle errors.
+                return null; // NotFoundObjectResult;
+            }
+
+            _db.DeleteQuestion(questionId);
+
+            return RedirectToAction("Index", "Admintest", new { id = testId});
+        }
     }
 }

@@ -28,13 +28,7 @@ namespace Examination.WEB.Controllers
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult Tests()
-        {
-            var model = _db.GetTests();
-            return View(model);
-        }
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

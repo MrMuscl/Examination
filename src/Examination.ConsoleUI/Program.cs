@@ -1,5 +1,4 @@
-﻿using AdventureWorksSample;
-using Examination.Data.Models;
+﻿using Examination.Data.Models;
 using Examination.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,7 +11,6 @@ namespace Examination.ConsoleUI
     {
         static ExaminationContext dbContext = new ExaminationContext();
         static IExaminationData _data = new ExaminationData(dbContext);
-        static AdventureWorks2014Context _ADdbContext = new AdventureWorks2014Context();
 
 
         private static void InitDb()
@@ -87,22 +85,6 @@ namespace Examination.ConsoleUI
             //var test = dbContext.TestQuestions.Include(tq => tq.Question).Where(tq => tq.TestId == 1).Select(//tq => tq.Question).ToList();
 
 
-        }
-
-        static void Adwentureworks_GetProj() 
-        {
-            var products = (from p in _ADdbContext.Products
-                            where p.Name.StartsWith("A") & p.ProductModelId != null
-                            select p
-                   )
-                   .Take(5)
-                   .ToList();
-
-            foreach (var p in products)
-            {
-                Console.ReadLine();
-                Console.WriteLine("{0} {1} {2}", p.ProductId, p.Name, p.ProductModel.Name);
-            }
         }
 
         static void AddQuestion() 

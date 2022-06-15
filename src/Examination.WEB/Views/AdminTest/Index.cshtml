@@ -69,7 +69,7 @@
         <td>
             @Html.ActionLink("Select", "Index", new { questionId = item.Id }) |
             @Html.ActionLink("Edit", "Index", new { questionId = item.Id }) |
-            @Html.ActionLink("Remove", "Index", new { questionId = item.Id })
+            @Html.ActionLink("Remove", "Remove", "Question", new { Id = item.Id, testId = ViewBag.Test.Id })
         </td>
         <td>
             @item.Text
