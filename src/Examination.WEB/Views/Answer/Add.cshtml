@@ -1,0 +1,49 @@
+﻿@model Examination.Data.Models.Answer
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h1>Add</h1>
+
+<h4>Answer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Add">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Text" class="control-label"></label>
+                <input asp-for="Text" class="form-control" />
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsValid" /> @Html.DisplayNameFor(model => model.IsValid)
+                    @if ((ViewBag.Test != null) && (ViewBag.Question != null))
+                    {
+                        <input type="hidden" id="TestId" name="TestId" value="@ViewBag.Test.Id" />
+                        <input type="hidden" id="QuestionId" name="QuestionId" value="@ViewBag.Question.Id" />
+                    }
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    @if ((ViewBag.Test != null) && (ViewBag.Question != null))
+    {
+        <input type="hidden" id="TestId" name="TestId" value="@ViewBag.Test.Id" />
+        <input type="hidden" id="QuestionId" name="QuestionId" value="@ViewBag.Question.Id" />
+        @Html.ActionLink("Back","Index", "AdminTest", new { id = ViewBag.Test.Id, questionId = ViewBag.Question.Id });
+    }
+    else
+    {
+        <a asp-controller="AdminTest" asp-action="Index">Back to List</a>
+    }
+</div>
+

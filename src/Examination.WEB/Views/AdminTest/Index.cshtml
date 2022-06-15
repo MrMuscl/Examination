@@ -1,0 +1,109 @@
+﻿@model Examination.WEB.Models.TestsIndexViewModel
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<h1>Admin</h1>
+
+<p>
+    <a asp-action="Create">Create New Test</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Difficulty
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Tests)
+        {
+            var selectedRow = "";
+            if (item.Id == ViewBag.TestId)
+            {
+                selectedRow = "alert-success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Difficulty)
+                </td>
+                <td>
+                    <a asp-action="Index" asp-route-id="@item.Id">Select</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                    <a asp-action="Delete" asp-route-id="@item.Id">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Questions != null)
+{
+    <h3>Questions for @ViewBag.Test.Name test:</h3>
+    <table class="table">
+        <tr>
+            <th>
+                <a asp-action="Add" asp-controller="Question" asp-route-id="@ViewBag.Test.Id">Add new question</a>
+            </th>
+            <th>Text</th>
+        </tr>
+        @foreach (var item in Model.Questions)
+        {
+            string selectedRow = "";
+            if (item.Id == ViewBag.QuestionId)
+            {
+                selectedRow = "alert-success";
+            }
+    <tr class="@selectedRow">
+
+        <td>
+            @Html.ActionLink("Select", "Index", new { questionId = item.Id }) |
+            @Html.ActionLink("Edit", "Index", new { questionId = item.Id }) |
+            @Html.ActionLink("Remove", "Index", new { questionId = item.Id })
+        </td>
+        <td>
+            @item.Text
+        </td>
+    </tr>
+        }
+    </table>
+}
+
+@if (Model.Answers != null)
+{
+    <h3>Answers for selected question:</h3>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("Add new answer", "Add", "Answer", new { questionId = ViewBag.Question.Id, testId = ViewBag.Test.Id })
+            </th>
+            <th>Text</th>
+            <th>Is correct</th>
+        </tr>
+        @foreach (var item in Model.Answers)
+        {
+    <tr>
+        <td>
+            @Html.ActionLink("Edit", "Index", new { questinId = item.Id }) |
+            @Html.ActionLink("Remove", "Index", new { questinId = item.Id }) 
+        </td>
+        <td>
+            @item.Text
+        </td>
+        <td>
+            @item.IsValid
+        </td>
+    </tr>
+        }
+    </table>
+}

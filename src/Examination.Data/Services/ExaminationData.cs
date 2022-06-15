@@ -45,18 +45,30 @@ namespace Examination.Data.Services
 
         public Test GetTest(int id)
         {
-            return _db.Tests.Find(id);
+            return _db.Tests
+                .Where(t => t.Id == id)
+                .Include(t => t.Questions)
+                .SingleOrDefault();
         }
 
         public IEnumerable<Test> GetTests()
         {
-            return _db.Tests.Select(t => t).Include(t => t.Questions).ToList();
+            return _db.Tests
+                .Select(t => t)
+                .Include(t => t.Questions).ThenInclude(q => q.Answers)
+                .ToList();
         }
 
         public void UpdateTest(Test test) 
         {
+            //var target = _db.Tests.Where(t => t.Id == test.Id).Include(t => t.Questions).SingleOrDefault();
+            //target.Name = test.Name;
+            //target.Questions = test.Questions;
+            //target.Difficulty = test.Difficulty;
+
             var entry = _db.Entry(test);
             entry.State = EntityState.Modified;
+
             _db.SaveChanges();
         }
                 
@@ -65,16 +77,34 @@ namespace Examination.Data.Services
             var questions = _db.Tests.Where(t => t.Id == id)
                 .Include(t => t.Questions)
                 .SingleOrDefault()
-                .Questions;
+                .Questions.ToList();
 
             return questions;
         }
 
-        public void AddQuestionToTest(Question question, int testId)
+        public void AddNewQuestionToTest(Question question, int testId)
         {
+            question.Id = 0;
             var test = GetTest(testId);
             test.Questions.Add(question);
             
+            _db.SaveChanges();
+        }
+
+        public Question GetQuestion(int id)
+        {
+            return _db.Questions
+                .Where(q => q.Id == id)
+                .Include(q => q.Answers)
+                .SingleOrDefault();
+        }
+
+        public void AddNewAnswerToQuestion(Answer answer, int questionId) 
+        {
+            answer.Id = 0;
+            var question = GetQuestion(questionId);
+            question.Answers.Add(answer);
+
             _db.SaveChanges();
         }
     }

@@ -52,7 +52,21 @@ namespace Examination.Data.Services
         /// </summary>
         /// <param name="question">Question object</param>
         /// <param name="testId">Test id the question should be added to</param>
-        void AddQuestionToTest(Question question, int testId);
+        void AddNewQuestionToTest(Question question, int testId);
+
+        /// <summary>
+        /// Get question with specifid id
+        /// </summary>
+        /// <param name="id">Question id</param>
+        /// <returns>Question object</returns>
+        Question GetQuestion(int id);
+
+        /// <summary>
+        /// Add new answer to specified test
+        /// </summary>
+        /// <param name="answer">Answer object</param>
+        /// <param name="questionId">Question id the answer should be added to</param>
+        void AddNewAnswerToQuestion(Answer answer, int questionId);
             
         
     }
