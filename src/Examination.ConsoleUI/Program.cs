@@ -35,6 +35,7 @@ namespace Examination.ConsoleUI
 
             
             InitDb();
+            //UpdateTest(1);
 
         }
         
@@ -109,6 +110,15 @@ namespace Examination.ConsoleUI
             var test = dbContext.Tests.Where(t => t.Id == 1).FirstOrDefault();
             var question = new Question { Text = "New question1"};
             test.Questions.Add(question);
+            
+            dbContext.SaveChanges();
+        }
+
+        static void UpdateTest(int id) 
+        {
+            var test = dbContext.Tests.Where(t => t.Id == id).Include(t=>t.Questions).SingleOrDefault();
+
+            //test.Questions = new List<Question> { new Question { Text = "QQ1"}, new Question { Text = "QQ2" } };
             
             dbContext.SaveChanges();
         }
