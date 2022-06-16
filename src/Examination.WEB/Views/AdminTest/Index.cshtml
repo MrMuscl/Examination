@@ -95,7 +95,7 @@
     <tr>
         <td>
             @Html.ActionLink("Edit", "Edit", "Answer", new { Id = item.Id, questionId = ViewBag.QuestionId, testId = ViewBag.TestId }) |
-            @Html.ActionLink("Remove", "Index", new { questinId = item.Id }) 
+            @Html.ActionLink("Remove", "Remove", "Answer", new { Id = item.Id, questionId = ViewBag.QuestionId, testId = ViewBag.TestId }) 
         </td>
         <td>
             @item.Text

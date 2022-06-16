@@ -92,5 +92,11 @@ namespace Examination.Data.Services
         /// </summary>
         /// <param name="answer">Answer object</param>
         void UpdateAnswer(Answer answer);
+
+        /// <summary>
+        /// Remove answer entity.
+        /// </summary>
+        /// <param name="answerId">Answer id</param>
+        void DeleteAnswer(int answerId);
      }
 }
