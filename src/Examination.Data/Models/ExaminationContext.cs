@@ -48,7 +48,7 @@ namespace Examination.Data.Models
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
-                entity.Property(e => e.Text).HasColumnType("text");
+                //entity.Property(e => e.Text).HasColumnType("text");
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Answers)
@@ -57,27 +57,28 @@ namespace Examination.Data.Models
                     .HasConstraintName("FK_Answer_Question");
             });
 
-            modelBuilder.Entity<Question>(entity =>
-            {
-                entity.ToTable("Question");
+            //modelBuilder.Entity<Question>(entity =>
+            //{
+            //    entity.ToTable("Question");
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID");
+            //    entity.Property(e => e.Id)
+            //        .HasColumnName("ID");
 
-                entity.Property(e => e.Text).HasColumnType("text");
-            });
+            //    entity.Property(e => e.Text).HasColumnType("text");
+            //});
 
-            modelBuilder.Entity<Test>(entity =>
-            {
-                entity.ToTable("Test");
+            
+            //modelBuilder.Entity<Test>(entity =>
+            //{
+            //    entity.ToTable("Test");
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID");
+            //    entity.Property(e => e.Id)
+            //        .HasColumnName("ID");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(255)
-                    .IsFixedLength(true);
-            });
+            //    entity.Property(e => e.Name)
+            //        .HasMaxLength(255)
+            //        .IsFixedLength(true);
+            //});
 
             OnModelCreatingPartial(modelBuilder);
         }

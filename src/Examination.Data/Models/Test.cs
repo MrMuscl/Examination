@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -13,6 +14,7 @@ namespace Examination.Data.Models
         }
 
         public int Id { get; set; }
+        [StringLength(250)]
         public string Name { get; set; }
         public TestDifficulty? Difficulty { get; set; }
 
