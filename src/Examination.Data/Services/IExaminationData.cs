@@ -10,45 +10,45 @@ namespace Examination.Data.Services
     public interface IExaminationData
     {
         /// <summary>
-        /// Get all test objects
+        /// Get all test objects.
         /// </summary>
         /// <returns>The collection of tests</returns>
         IEnumerable<Test> GetTests();
 
         /// <summary>
-        /// Get test with specified id
+        /// Get test with specified id.
         /// </summary>
         /// <param name="">Test id</param>
         /// <returns>Test object </returns>
         Test GetTest(int id);
 
         /// <summary>
-        /// Add test 
+        /// Add test. 
         /// </summary>
         /// <param name="test">Test object that should be added</param>
         void AddTest(Test test);
 
         /// <summary>
-        /// Get questions for specified test
+        /// Get questions for specified test.
         /// </summary>
         /// <param name="id">Test id</param>
         /// <returns>The collection of question objects</returns>
         IEnumerable<Question> GetQuestionsForTest(int id);
 
         /// <summary>
-        /// Delete test with specified id
+        /// Delete test with specified id.
         /// </summary>
         /// <param name="id">Test id</param>
         void DeleteTest(int id);
 
         /// <summary>
-        /// Update test with new object
+        /// Update test with new object.
         /// </summary>
         /// <param name="id">Test object</param>
         void UpdateTest(Test test);
 
         /// <summary>
-        /// Add new question to specified test
+        /// Add new question to specified test.
         /// </summary>
         /// <param name="question">Question object</param>
         /// <param name="testId">Test id the question should be added to</param>
@@ -62,22 +62,35 @@ namespace Examination.Data.Services
         Question GetQuestion(int id);
 
         /// <summary>
-        /// Add new answer to specified test
+        /// Add new answer to specified test.
         /// </summary>
         /// <param name="answer">Answer object</param>
         /// <param name="questionId">Question id the answer should be added to</param>
         void AddNewAnswerToQuestion(Answer answer, int questionId);
 
         /// <summary>
-        /// Remove question enity with all related answers
+        /// Remove question enity with all related answers.
         /// </summary>
         /// <param name="questionId">Id of the question</param>
         void DeleteQuestion(int questionId);
 
         /// <summary>
-        /// Update question with new object
+        /// Update question with new object.
         /// </summary>
         /// <param name="question">Question object</param>
         void UpdateQuestion(Question question);
+
+        /// <summary>
+        /// Get answer with specified id.
+        /// </summary>
+        /// <param name="id">Answer id</param>
+        /// <returns>Answer object</returns>
+        Answer GetAnswer(int id);
+
+        /// <summary>
+        /// Updaet answer with new object.
+        /// </summary>
+        /// <param name="answer">Answer object</param>
+        void UpdateAnswer(Answer answer);
      }
 }

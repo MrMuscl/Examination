@@ -68,8 +68,8 @@
 
         <td>
             @Html.ActionLink("Select", "Index", new { questionId = item.Id }) |
-            @Html.ActionLink("Edit", "Edit", "Question", new { Id = item.Id, testId = ViewBag.Test.Id }) |
-            @Html.ActionLink("Remove", "Remove", "Question", new { Id = item.Id, testId = ViewBag.Test.Id })
+            @Html.ActionLink("Edit", "Edit", "Question", new { Id = item.Id, testId = ViewBag.TestId }) |
+            @Html.ActionLink("Remove", "Remove", "Question", new { Id = item.Id, testId = ViewBag.TestId })
         </td>
         <td>
             @item.Text
@@ -85,7 +85,7 @@
     <table class="table">
         <tr>
             <th>
-                @Html.ActionLink("Add new answer", "Add", "Answer", new { questionId = ViewBag.Question.Id, testId = ViewBag.Test.Id })
+                @Html.ActionLink("Add new answer", "Add", "Answer", new { questionId = ViewBag.QuestionId, testId = ViewBag.TestId })
             </th>
             <th>Text</th>
             <th>Is correct</th>
@@ -94,7 +94,7 @@
         {
     <tr>
         <td>
-            @Html.ActionLink("Edit", "Index", new { questinId = item.Id }) |
+            @Html.ActionLink("Edit", "Edit", "Answer", new { Id = item.Id, questionId = ViewBag.QuestionId, testId = ViewBag.TestId }) |
             @Html.ActionLink("Remove", "Index", new { questinId = item.Id }) 
         </td>
         <td>

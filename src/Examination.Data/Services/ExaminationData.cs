@@ -126,5 +126,21 @@ namespace Examination.Data.Services
 
             _db.SaveChanges();
         }
+
+        public Answer GetAnswer(int id) 
+        {
+            return _db.Answers
+                .Include(a => a.Question)
+                .Where(a => a.Id == id)
+                .FirstOrDefault();
+        }
+
+        public void UpdateAnswer(Answer answer) 
+        {
+            var entry = _db.Entry(answer);
+            entry.State = EntityState.Modified;
+
+            _db.SaveChanges();
+        }
     }
 }
