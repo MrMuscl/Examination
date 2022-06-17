@@ -50,6 +50,22 @@ namespace Examination.Data.Services
                 .Include(t => t.Questions)
                 .SingleOrDefault();
         }
+        
+        public Test GetTestWithQuestions(int id)
+        {
+            return _db.Tests
+                .Where(t => t.Id == id)
+                .Include(t => t.Questions)
+                .SingleOrDefault();
+        }
+
+        public Test GetTestWithQuestionsAndAnswers(int id) 
+        {
+            return _db.Tests
+            .Where(t => t.Id == id)
+            .Include(t => t.Questions).ThenInclude(q => q.Answers)
+            .SingleOrDefault();
+        }
 
         public IEnumerable<Test> GetTests()
         {

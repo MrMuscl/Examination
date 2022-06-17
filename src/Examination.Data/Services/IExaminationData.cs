@@ -23,6 +23,20 @@ namespace Examination.Data.Services
         Test GetTest(int id);
 
         /// <summary>
+        /// Get test with specified id include related questions.
+        /// </summary>
+        /// <param name="">Test id</param>
+        /// <returns>Test object </returns>
+        Test GetTestWithQuestions(int id);
+
+        /// <summary>
+        /// Get test with specified id include related questions and answers.
+        /// </summary>
+        /// <param name="">Test id</param>
+        /// <returns>Test object </returns>
+        Test GetTestWithQuestionsAndAnswers(int id);
+
+        /// <summary>
         /// Add test. 
         /// </summary>
         /// <param name="test">Test object that should be added</param>
