@@ -11,6 +11,7 @@ namespace Examination.Data.Models
         public Test()
         {
             Questions = new HashSet<Question>();
+            Protocols = new HashSet<Protocol>();
         }
 
         public int Id { get; set; }
@@ -19,5 +20,6 @@ namespace Examination.Data.Models
         public TestDifficulty? Difficulty { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Protocol> Protocols { get; set; }
     }
 }

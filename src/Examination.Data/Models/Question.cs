@@ -12,13 +12,16 @@ namespace Examination.Data.Models
         {
             Answers = new HashSet<Answer>();
             Tests = new HashSet<Test>();
+            Protocols = new HashSet<Protocol>();
         }
 
         public int Id { get; set; }
-        [DataType(DataType.Text)]
+        //[DataType(DataType.Text)]
+        [StringLength(2000)]
         public string Text { get; set; }
 
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<Test> Tests { get; set; }
+        public virtual ICollection<Protocol> Protocols { get; set; }
     }
 }

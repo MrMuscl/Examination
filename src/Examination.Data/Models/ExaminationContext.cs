@@ -23,6 +23,8 @@ namespace Examination.Data.Models
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
+        public virtual DbSet<Protocol> Protocols { get; set; }
+        public virtual DbSet<Attestation> Attestations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -41,20 +43,49 @@ namespace Examination.Data.Models
         {
             modelBuilder.Entity<Answer>(entity =>
             {
-                entity.ToTable("Answer");
+                entity.ToTable("Answers");
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("ID");
+                    .HasColumnName("Id");
 
-                entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
-
-                //entity.Property(e => e.Text).HasColumnType("text");
+                entity.Property(e => e.QuestionId).HasColumnName("QuestionId");
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Answers)
                     .HasForeignKey(d => d.QuestionId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Answer_Question");
+            });
+
+            modelBuilder.Entity<Protocol>(entity =>
+            {
+                entity.HasOne(d => d.Answer)
+                    .WithMany(p => p.Protocols)
+                    .HasForeignKey(d => d.AnswerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Protocols_Answers");
+
+                entity.HasOne(d => d.Attestation)
+                    .WithMany(p => p.Protocols)
+                    .HasForeignKey(d => d.AttestationId)
+                    .HasConstraintName("FK_Protocol_Attestation");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.Protocols)
+                    .HasForeignKey(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Protocols_Questions");
+
+                entity.HasOne(d => d.Test)
+                    .WithMany(p => p.Protocols)
+                    .HasForeignKey(d => d.TestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Protocols_Tests");
+            });
+
+            modelBuilder.Entity<Attestation>(entity =>
+            {
+                entity.ToTable("Attestations");
             });
 
             //modelBuilder.Entity<Question>(entity =>
