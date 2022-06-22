@@ -3,6 +3,7 @@ using Examination.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Examination.ConsoleUI
@@ -20,6 +21,7 @@ namespace Examination.ConsoleUI
             initDB.EnsureDbDeleted();
             initDB.EnsureDbCreated();
             initDB.SeedTestData();
+            initDB.SeedRealData();
         }
         
         static void Main(string[] args)
@@ -31,9 +33,12 @@ namespace Examination.ConsoleUI
             //Adwentureworks_GetProj();
             //AddQuestion();
 
-            
-            InitDb();
+
+            //InitDb();
             //UpdateTest(1);
+            var rdr = new SampleDataReader();
+            rdr.SeedTestData();
+
 
         }
         

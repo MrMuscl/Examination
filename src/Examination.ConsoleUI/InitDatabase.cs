@@ -89,5 +89,10 @@ namespace Examination.ConsoleUI
             
             _db.SaveChanges();
         }
+        public void SeedRealData() 
+        {
+            var rdr = new SampleDataReader();
+            rdr.SeedTestData();
+        }
     }
 }
