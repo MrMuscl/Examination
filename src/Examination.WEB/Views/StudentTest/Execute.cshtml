@@ -7,9 +7,9 @@
 <h1>Execute</h1>
 
 <div>
-    <h4>Question</h4>
+    <h4>Question (@ViewBag.QuestionNumber of @ViewBag.QuestionCount)</h4>
     <hr />
-    <form >
+    <form action="" method="post">
         <dl class="row">
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Text)
@@ -22,11 +22,19 @@
 
         <div>
             <hr>
-            <button type="submit" class="btn-info" formaction="ExecutePrev">Prevu</button>
-            <button type="submit" class="btn-info" formaction="ExecuteNext">Next</button>
+            @if (ViewBag.QuestionNumber != 1)
+            {
+                <input type="submit" name="navigationBtn" class="btn-info" value="Prev" />
+            }
+            @if (ViewBag.QuestionNumber != ViewBag.QuestionCount)
+            {
+                <input type="submit" name="navigationBtn" class="btn-info" value="Next" />
+            }
         </div>
+        <input type="hidden" name="QuestionNumber" value="@ViewBag.QuestionNumber" />
+        <input type="hidden" name="TestId" value="@ViewBag.TestId" />
     </form>
-
+    
 
 </div>
 <div>

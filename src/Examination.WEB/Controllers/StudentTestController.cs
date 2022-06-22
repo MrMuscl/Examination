@@ -1,5 +1,7 @@
 ﻿using Examination.Data.Models;
 using Examination.Data.Services;
+using Examination.WEB.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -33,7 +35,9 @@ namespace Examination.WEB.Controllers
             Question question;
             
             var test = _db.GetTestWithQuestionsAndAnswers(id);
-            ViewBag.QuestionNumber = questionNumber;
+            ViewBag.QuestionNumber = questionNumber?? 1;
+            ViewBag.QuestionCount = test.Questions.Count();
+            ViewBag.TestId = id;
 
             if (questionNumber == null)
             {
@@ -51,23 +55,22 @@ namespace Examination.WEB.Controllers
         }
 
         [HttpPost]
-        public IActionResult ExecutePrev(int id, int? questionNumber)
+        public IActionResult Execute(string navigationBtn, IFormCollection form) 
         {
-            var question = _db.GetQuestion(id);
-            ViewBag.QuestionNumber = questionNumber;
+            int questionNumber;
+            Helper.GetFormIntValue(form, "QuestionNumber", out questionNumber);
 
-            
-            
-            return RedirectToAction("Execute", "StudentTest", new { Id = 1, QuestinNumber = questionNumber - 1});
-        }
+            int testId;
+            Helper.GetFormIntValue(form, "TestId", out testId);
 
-        [HttpPost]
-        public IActionResult ExecuteNext(int id, int? questionNumber)
-        {
-            var question = _db.GetQuestion(id);
-            ViewBag.QuestionNumber = questionNumber;
-
-            return RedirectToAction("Execute", "StudentTest", new { Id = 1, QuestinNumber = questionNumber + 1 });
+            switch (navigationBtn) 
+            {
+                case "Prev":
+                    return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber - 1 });
+                case "Next":
+                    return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber + 1 });
+            }
+            return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestinNumber = 1 });
         }
     }
 }
