@@ -34,12 +34,7 @@ namespace Examination.ConsoleUI
             //AddQuestion();
 
 
-            //InitDb();
-            //UpdateTest(1);
-            var rdr = new SampleDataReader();
-            rdr.SeedTestData();
-
-
+            InitDb();
         }
         
         static void GetAllTestItems() 

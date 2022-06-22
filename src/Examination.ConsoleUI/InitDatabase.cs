@@ -33,7 +33,7 @@ namespace Examination.ConsoleUI
                             new Answer{ Text="100 000 km", IsValid = false},
                             new Answer{ Text="250 000 km", IsValid = false},
                             new Answer{ Text="350 000 km", IsValid = true}
-                        } 
+                        }, Number = 1 
                     },
                     new Question
                     { Text = "What is the largest planet in Solar system?", Answers = new List<Answer>
@@ -41,7 +41,7 @@ namespace Examination.ConsoleUI
                             new Answer{ Text = "Jupiter", IsValid = true},
                             new Answer{ Text = "Earth", IsValid = false},
                             new Answer{ Text = "Mars", IsValid = false}
-                        }
+                        }, Number = 2
                     }
                 }
             };
@@ -69,7 +69,7 @@ namespace Examination.ConsoleUI
                             new Answer{ Text="m/s", IsValid = true},
                             new Answer{ Text="N/m", IsValid = false},
                             new Answer{ Text="m/s^2", IsValid = false}
-                        }
+                        }, Number = 1
                     },
                     new Question
                     { Text = "How many angles does triangle have?", Answers = new List<Answer>
@@ -77,7 +77,7 @@ namespace Examination.ConsoleUI
                             new Answer{ Text = "One", IsValid = false},
                             new Answer{ Text = "Two", IsValid = false},
                             new Answer{ Text = "Three", IsValid = true}
-                        }
+                        }, Number = 2 
                     }
                 }
             };

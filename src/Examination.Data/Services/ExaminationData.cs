@@ -101,6 +101,7 @@ namespace Examination.Data.Services
         public void AddNewQuestionToTest(Question question, int testId)
         {
             question.Id = 0;
+            question.Number = GetLastQuestionNumber(testId) + 1;
             var test = GetTest(testId);
             test.Questions.Add(question);
             
@@ -127,11 +128,22 @@ namespace Examination.Data.Services
         public void DeleteQuestion(int questionId) 
         {
             var question = _db.Questions
-                .Include(q => q.Answers).
-                Where(q => q.Id == questionId).
-                SingleOrDefault();
+                .Include(q => q.Answers)
+                .Include(q => q.Test)
+                .Where(q => q.Id == questionId)
+                .SingleOrDefault();
             
+            var testId = question.Test.Id;
+
             _db.Questions.Remove(question);
+            _db.SaveChanges();
+
+            // Adjust question number after removing one.
+            var questions = _db.Tests.Where(t => t.Id == testId).Include(t => t.Questions).FirstOrDefault().Questions;
+            for (int i = 0; i < questions.Count(); i++) 
+            {
+                questions.ToArray()[i].Number = i + 1;
+            }
             _db.SaveChanges();
         }
 
@@ -167,6 +179,11 @@ namespace Examination.Data.Services
 
             _db.Answers.Remove(answer);
             _db.SaveChanges();
+        }
+
+        public int GetLastQuestionNumber(int testId) 
+        {
+            return _db.Questions.Where(q => q.Test.Id == testId).Max(q => q.Number);
         }
 
     }

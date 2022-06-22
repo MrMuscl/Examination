@@ -1,5 +1,6 @@
 ﻿using Examination.Data.Models;
 using Examination.Data.Services;
+using Examination.WEB.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -36,15 +37,11 @@ namespace Examination.WEB.Controllers
         [HttpPost]
         public IActionResult Add(Question question, IFormCollection form)
         {
-            StringValues sTestId;
             int testId = 0;
-            if (!form.TryGetValue("TestId", out sTestId)) 
-                return RedirectToAction("Index", "AdminTest");
+            Helper.GetFormIntValue(form, "TestId", out testId);
             
-            if (!int.TryParse(sTestId, out testId))
-                return RedirectToAction("Index", "AdminTest");
-
             _db.AddNewQuestionToTest(question, testId);
+
             return RedirectToAction("Index", "AdminTest", new { Id = testId });
         }
 
@@ -64,33 +61,12 @@ namespace Examination.WEB.Controllers
         [HttpPost]
         public IActionResult Remove(Question question, IFormCollection form) 
         {
-            int questionId, testId;
-            StringValues qValue, tValue;
+            int questionId;
+            Helper.GetFormIntValue(form, "QuestionId", out questionId);
 
-            if (!form.TryGetValue("QuestionId", out qValue))
-            {
-                // TODO: handle errors.
-                return null; // NotFoundObjectResult;
-            }
-
-            if (!form.TryGetValue("TestId", out tValue))
-            {
-                // TODO: handle errors.
-                return null; // NotFoundObjectResult;
-            }
-
-            if (!int.TryParse(qValue.ToString(), out questionId))
-            {
-                // TODO: handle errors.
-                return null; // NotFoundObjectResult;
-            }
-
-            if (!int.TryParse(tValue.ToString(), out testId))
-            {
-                // TODO: handle errors.
-                return null; // NotFoundObjectResult;
-            }
-
+            int testId;
+            Helper.GetFormIntValue(form, "TestId", out testId);
+            
             _db.DeleteQuestion(questionId);
 
             return RedirectToAction("Index", "Admintest", new { id = testId});
@@ -110,20 +86,8 @@ namespace Examination.WEB.Controllers
 
         public IActionResult Edit(Question question, IFormCollection form)
         {
-            StringValues value;
             int testId;
-
-            if (!form.TryGetValue("TestId", out value))
-            {
-                // TODO: handle errors.
-                return null; // NotFoundObjectResult;
-            }
-
-            if (!int.TryParse(value.ToString(), out testId))
-            {
-                // TODO: handle errors.
-                return null; // NotFoundObjectResult;
-            }
+            Helper.GetFormIntValue(form, "TestId", out testId);
 
             _db.UpdateQuestion(question);
 

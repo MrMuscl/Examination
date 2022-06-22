@@ -27,12 +27,13 @@ namespace Examination.ConsoleUI
             var result = new List<Question>();
             var question = new Question();
             var answer = new Answer();
+            int questionNumber = 1;
 
             for (int i = 0; i < lines.Count() - 1; i++) 
             {
                 if (lines[i].StartsWith('#'))
                 {
-                    question = new Question { Text = lines[i].Substring(1), Number = i };
+                    question = new Question { Text = lines[i].Substring(1), Number = questionNumber };
                     continue;
                 }
                 if (lines[i].StartsWith('+') || lines[i].StartsWith('-')) 
@@ -41,8 +42,12 @@ namespace Examination.ConsoleUI
                     answer.IsValid = lines[i].StartsWith('+');
                     question.Answers.Add(answer);
                 }
-                if (lines[i].StartsWith('&'))
+                if (lines[i].StartsWith('&')) 
+                {
                     result.Add(question);
+                    questionNumber++;
+                }
+                
             }
             
             return result;
