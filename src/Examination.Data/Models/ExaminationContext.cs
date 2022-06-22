@@ -70,11 +70,11 @@ namespace Examination.Data.Models
                     .HasForeignKey(d => d.AttestationId)
                     .HasConstraintName("FK_Protocol_Attestation");
 
-                entity.HasOne(d => d.Question)
-                    .WithMany(p => p.Protocols)
-                    .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Protocols_Questions");
+                //entity.HasOne(d => d.Question)
+                //    .WithOne(p => p.Protocol)
+                //    .HasForeignKey(e => e.)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_Protocols_Questions");
 
                 entity.HasOne(d => d.Test)
                     .WithMany(p => p.Protocols)
@@ -87,30 +87,7 @@ namespace Examination.Data.Models
             {
                 entity.ToTable("Attestations");
             });
-
-            //modelBuilder.Entity<Question>(entity =>
-            //{
-            //    entity.ToTable("Question");
-
-            //    entity.Property(e => e.Id)
-            //        .HasColumnName("ID");
-
-            //    entity.Property(e => e.Text).HasColumnType("text");
-            //});
-
-            
-            //modelBuilder.Entity<Test>(entity =>
-            //{
-            //    entity.ToTable("Test");
-
-            //    entity.Property(e => e.Id)
-            //        .HasColumnName("ID");
-
-            //    entity.Property(e => e.Name)
-            //        .HasMaxLength(255)
-            //        .IsFixedLength(true);
-            //});
-
+                        
             OnModelCreatingPartial(modelBuilder);
         }
 
