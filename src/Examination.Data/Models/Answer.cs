@@ -20,6 +20,6 @@ namespace Examination.Data.Models
 
         public int QuestionId { get; set; }
         public virtual Question Question { get; set; }
-        public virtual Collection<Protocol> Protocols { get; set; }
+        public virtual Protocol Protocol { get; set; }
     }
 }

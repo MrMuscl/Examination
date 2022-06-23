@@ -53,34 +53,8 @@ namespace Examination.Data.Models
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Answers)
                     .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_Answer_Question");
-            });
-
-            modelBuilder.Entity<Protocol>(entity =>
-            {
-                entity.HasOne(d => d.Answer)
-                    .WithMany(p => p.Protocols)
-                    .HasForeignKey(d => d.AnswerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Protocols_Answers");
-
-                entity.HasOne(d => d.Attestation)
-                    .WithMany(p => p.Protocols)
-                    .HasForeignKey(d => d.AttestationId)
-                    .HasConstraintName("FK_Protocol_Attestation");
-
-                //entity.HasOne(d => d.Question)
-                //    .WithOne(p => p.Protocol)
-                //    .HasForeignKey(e => e.)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("FK_Protocols_Questions");
-
-                entity.HasOne(d => d.Test)
-                    .WithMany(p => p.Protocols)
-                    .HasForeignKey(d => d.TestId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Protocols_Tests");
             });
 
             modelBuilder.Entity<Attestation>(entity =>
