@@ -15,9 +15,9 @@ namespace Examination.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.17");
+                .HasAnnotation("ProductVersion", "5.0.17")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Examination.Data.Models.Answer", b =>
                 {
@@ -25,7 +25,7 @@ namespace Examination.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Id")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("IsValid")
                         .HasColumnType("bit");
@@ -50,10 +50,13 @@ namespace Examination.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
@@ -68,7 +71,7 @@ namespace Examination.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AnswerId")
                         .HasColumnType("int");
@@ -79,19 +82,15 @@ namespace Examination.Data.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TestId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("AnswerId");
+                    b.HasIndex("AnswerId")
+                        .IsUnique();
 
                     b.HasIndex("AttestationId");
 
                     b.HasIndex("QuestionId")
                         .IsUnique();
-
-                    b.HasIndex("TestId");
 
                     b.ToTable("Protocols");
                 });
@@ -101,7 +100,7 @@ namespace Examination.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -125,7 +124,7 @@ namespace Examination.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("Difficulty")
                         .HasColumnType("int");
@@ -145,7 +144,7 @@ namespace Examination.Data.Migrations
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .HasConstraintName("FK_Answer_Question")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Question");
@@ -154,15 +153,14 @@ namespace Examination.Data.Migrations
             modelBuilder.Entity("Examination.Data.Models.Protocol", b =>
                 {
                     b.HasOne("Examination.Data.Models.Answer", "Answer")
-                        .WithMany("Protocols")
-                        .HasForeignKey("AnswerId")
-                        .HasConstraintName("FK_Protocols_Answers")
+                        .WithOne("Protocol")
+                        .HasForeignKey("Examination.Data.Models.Protocol", "AnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Examination.Data.Models.Attestation", "Attestation")
                         .WithMany("Protocols")
-                        .HasForeignKey("AttestationId")
-                        .HasConstraintName("FK_Protocol_Attestation");
+                        .HasForeignKey("AttestationId");
 
                     b.HasOne("Examination.Data.Models.Question", "Question")
                         .WithOne("Protocol")
@@ -170,19 +168,11 @@ namespace Examination.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Examination.Data.Models.Test", "Test")
-                        .WithMany("Protocols")
-                        .HasForeignKey("TestId")
-                        .HasConstraintName("FK_Protocols_Tests")
-                        .IsRequired();
-
                     b.Navigation("Answer");
 
                     b.Navigation("Attestation");
 
                     b.Navigation("Question");
-
-                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Examination.Data.Models.Question", b =>
@@ -196,7 +186,7 @@ namespace Examination.Data.Migrations
 
             modelBuilder.Entity("Examination.Data.Models.Answer", b =>
                 {
-                    b.Navigation("Protocols");
+                    b.Navigation("Protocol");
                 });
 
             modelBuilder.Entity("Examination.Data.Models.Attestation", b =>
@@ -213,8 +203,6 @@ namespace Examination.Data.Migrations
 
             modelBuilder.Entity("Examination.Data.Models.Test", b =>
                 {
-                    b.Navigation("Protocols");
-
                     b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
