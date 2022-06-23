@@ -82,11 +82,46 @@ namespace Examination.ConsoleUI
                 }
             };
 
+            var test4 = new Test
+            {
+                Name = "Fake test",
+                Difficulty = TestDifficulty.Easy,
+                Questions = new List<Question>
+                {
+                    new Question
+                    { Text = "AAA", Answers = new List<Answer>
+                        {
+                            new Answer{ Text="aaa answer1", IsValid = true},
+                            new Answer{ Text="aaa answer2", IsValid = false},
+                            new Answer{ Text="aaa answer3", IsValid = false},
+                        }, Number = 1
+                    },
+                    new Question
+                    { Text = "BBB", Answers = new List<Answer>
+                        {
+                            new Answer{ Text="bbb answer1", IsValid = true},
+                            new Answer{ Text="bbb answer2", IsValid = false},
+                            new Answer{ Text="bbb answer3", IsValid = false},
+                        }, Number = 2
+                    },
+                    new Question
+                    { Text = "CCC", Answers = new List<Answer>
+                        {
+                            new Answer{ Text="ccc answer1", IsValid = true},
+                            new Answer{ Text="ccc answer2", IsValid = false},
+                            new Answer{ Text="ccc answer3", IsValid = false},
+                        }, Number = 3
+                    }
+                }
+            };
+
+
             var tests = _db.Tests.ToList();
             _db.Tests.Add(test1);
             _db.Tests.Add(test2);
             _db.Tests.Add(test3);
-            
+            _db.Tests.Add(test4);
+
             _db.SaveChanges();
         }
         public void SeedRealData() 

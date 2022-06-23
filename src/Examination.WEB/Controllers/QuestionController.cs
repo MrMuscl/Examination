@@ -75,13 +75,15 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Edit(int id, int? testId)
         {
+            var question = _db.GetQuestion(id);
+            ViewBag.QuestionNumber = question.Number;
+
             if (testId != null)
             {
                 ViewBag.TestId = testId.Value;
             }
-            var model = _db.GetQuestion(id);
-
-            return View(model);
+            
+            return View(question);
         }
 
         public IActionResult Edit(Question question, IFormCollection form)
@@ -89,6 +91,10 @@ namespace Examination.WEB.Controllers
             int testId;
             Helper.GetFormIntValue(form, "TestId", out testId);
 
+            int questionNumber;
+            Helper.GetFormIntValue(form, "QuestionNumber", out questionNumber);
+            
+            question.Number = questionNumber;
             _db.UpdateQuestion(question);
 
             return RedirectToAction("Index", "AdminTest", new { id = testId });

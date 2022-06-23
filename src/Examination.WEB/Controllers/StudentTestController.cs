@@ -32,8 +32,15 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Execute(int id, int? questionNumber) 
         {
+            if (questionNumber == null) 
+            {
+                var attestation = new Attestation();
+                attestation.StartTime = DateTime.Now;
+                attestation.IsActive = true;
+                _db.AddAttestation(attestation);
+            }
+
             Question question;
-            
             var test = _db.GetTestWithQuestionsAndAnswers(id);
             ViewBag.QuestionNumber = questionNumber?? 1;
             ViewBag.QuestionCount = test.Questions.Count();
@@ -50,7 +57,8 @@ namespace Examination.WEB.Controllers
 
             //if (question == null)
             //    return NotFoundResult
-
+            ViewBag.CheckedAnswer = question.Protocol?.AnswerId ?? 0;
+            
             return View(question);
         }
 
@@ -60,17 +68,31 @@ namespace Examination.WEB.Controllers
             int questionNumber;
             Helper.GetFormIntValue(form, "QuestionNumber", out questionNumber);
 
+            int questionId;
+            Helper.GetFormIntValue(form, "QuestionId", out questionId);
+
             int testId;
             Helper.GetFormIntValue(form, "TestId", out testId);
+
+            int answerId;
+            Helper.GetFormIntValue(form, "Answer", out answerId);
 
             switch (navigationBtn) 
             {
                 case "Prev":
+                    _db.AddProtocol(questionId, answerId);
                     return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber - 1 });
                 case "Next":
+                    _db.AddProtocol(questionId, answerId);
                     return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber + 1 });
+                case "Complete":
+                    _db.AddProtocol(questionId, answerId);
+                    _db.CompleteTest(testId);
+                    return RedirectToAction("Index", "StudentTest");
             }
-            return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestinNumber = 1 });
+            return RedirectToAction("Index", "StudentTest");
         }
+
+        
     }
 }

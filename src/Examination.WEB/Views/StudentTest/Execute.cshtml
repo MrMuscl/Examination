@@ -17,22 +17,36 @@
         </dl>
         @for (int i = 0; i < Model.Answers.Count; i++)
         {
-            <div><input type="radio" name="Answer" /> @Model.Answers.ToList()[i].Text</div>
+            if (Model.Answers.ToList()[i].Id == ViewBag.CheckedAnswer)
+            {
+                <div><input type="radio" name="Answer" value="@Model.Answers.ToList()[i].Id" checked /> @Model.Answers.ToList()[i].Text</div>
+            }
+            else
+            {
+                <div><input type="radio" name="Answer" value="@Model.Answers.ToList()[i].Id" /> @Model.Answers.ToList()[i].Text</div>
+            }
+
         }
 
-        <div>
-            <hr>
-            @if (ViewBag.QuestionNumber != 1)
-            {
-                <input type="submit" name="navigationBtn" class="btn-info" value="Prev" />
-            }
-            @if (ViewBag.QuestionNumber != ViewBag.QuestionCount)
-            {
-                <input type="submit" name="navigationBtn" class="btn-info" value="Next" />
-            }
-        </div>
+    <div>
+        <hr>
+        @if (ViewBag.QuestionNumber != 1)
+        {
+            <input type="submit" name="navigationBtn" class="btn-info" value="Prev" />
+        }
+        @if (ViewBag.QuestionNumber != ViewBag.QuestionCount)
+        {
+            <input type="submit" name="navigationBtn" class="btn-info" value="Next" />
+        }
+        @if (ViewBag.QuestionNumber == ViewBag.QuestionCount)
+        {
+            <input type="submit" name="navigationBtn" class="btn-info" value="Complete" />
+        }
+
+    </div>
         <input type="hidden" name="QuestionNumber" value="@ViewBag.QuestionNumber" />
         <input type="hidden" name="TestId" value="@ViewBag.TestId" />
+        <input type="hidden" name="QuestionId" value="@Model.Id" />
     </form>
     
 

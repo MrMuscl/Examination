@@ -64,6 +64,7 @@ namespace Examination.Data.Services
             return _db.Tests
             .Where(t => t.Id == id)
             .Include(t => t.Questions).ThenInclude(q => q.Answers)
+            .Include(t => t.Questions).ThenInclude(q => q.Protocol)
             .SingleOrDefault();
         }
 
@@ -191,5 +192,75 @@ namespace Examination.Data.Services
                 .FirstOrDefault();
         }
 
+        public void AddProtocol(int questionId, int answerId) 
+        {
+            // Check if the question has no protocol yet.
+            var question = _db.Questions.Where(q => q.Id == questionId).Include(q => q.Protocol).FirstOrDefault();
+            var answer = _db.Answers.Where(a => a.Id == answerId).FirstOrDefault();
+            if (answer == null)
+                return;
+
+            if (question == null /*|| answer == null*/)
+                throw new Exception("Either question or answer objects cannot be retrieved");
+
+            if (question.Protocol == null)
+            {
+                var protocol = new Protocol { Question = question, Answer = answer };
+                _db.Protocols.Add(protocol);
+            }
+            else 
+            {
+                question.Protocol.AnswerId = answerId;
+            }
+
+            _db.SaveChanges();
+        }
+
+        public void CreateAttestation(int testId)
+        {
+            var attestation = new Attestation();
+            attestation.StartTime = DateTime.Now;
+            attestation.EndTime = DateTime.Now;
+
+            var protocols = _db.Tests
+                .Where(t => t.Id == testId)
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Protocol)
+                .SingleOrDefault()
+                .Questions
+                .Select(q => q.Protocol)
+                .ToList();
+            
+            
+            attestation.Protocols = protocols;
+        }
+
+        public void AddAttestation(Attestation attestation) 
+        {
+            _db.Attestations.Add(attestation);
+            _db.SaveChanges();
+        }
+
+        
+        public  void CompleteTest(int testId)
+        {
+            // Get last active attestation.
+            var attestation = _db.Attestations.Where(a => a.IsActive == true).OrderByDescending(a => a.StartTime).FirstOrDefault();
+            attestation.EndTime = DateTime.Now;
+            attestation.IsActive = false;
+
+            var protocols = _db.Tests
+                .Where(t => t.Id == testId)
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Protocol)
+                .SingleOrDefault()
+                .Questions
+                .Select(q => q.Protocol)
+                .ToList();
+
+            attestation.Protocols = protocols;
+           
+            _db.SaveChanges();
+        }
     }
 }

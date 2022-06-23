@@ -112,5 +112,24 @@ namespace Examination.Data.Services
         /// </summary>
         /// <param name="answerId">Answer id</param>
         void DeleteAnswer(int answerId);
+
+        /// <summary>
+        /// Add new protocol. If protocol already exists - then update it.
+        /// </summary>
+        /// <param name="questionId">Question id</param>
+        /// <param name="answerId">Answer id</param>
+        void AddProtocol(int questionId, int answerId);
+
+        /// <summary>
+        /// Add new attestation.
+        /// </summary>
+        /// <param name="attestation">Attestation object</param>
+        void AddAttestation(Attestation attestation);
+
+        /// <summary>
+        /// Complete test. Add protocols collection to active attestation and store end date.
+        /// </summary>
+        /// <param name="testId">Test id</param>
+        void CompleteTest(int testId);
      }
 }
