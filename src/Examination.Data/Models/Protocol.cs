@@ -12,7 +12,7 @@ namespace Examination.Data.Models
         public int TestId { get; set; }
         public int QuestionId { get; set; }
         public int AnswerId { get; set; }
-        public int AttestationId { get; set; }
+        public int? AttestationId { get; set; }
 
         public virtual Attestation Attestation { get; set; }
         public virtual Answer Answer { get; set; }
