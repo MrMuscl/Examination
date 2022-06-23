@@ -183,7 +183,12 @@ namespace Examination.Data.Services
 
         public int GetLastQuestionNumber(int testId) 
         {
-            return _db.Questions.Where(q => q.Test.Id == testId).Max(q => q.Number);
+            //return _db.Questions.Where(q => q.Test.Id == testId).Max(q => q.Number);
+            return  _db.Questions
+                .Where(q => q.Test.Id == testId)
+                .OrderByDescending(q => q.Number)
+                .Select(q => q.Number)
+                .FirstOrDefault();
         }
 
     }
