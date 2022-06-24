@@ -16,7 +16,7 @@ namespace Examination.ConsoleUI
 
         public SampleDataReader()
         {
-            _dataFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\DB\Data\Industry"));
+            _dataFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\DB\Data\Industry_light"));
             _files = new List<string>(Directory.GetFiles(_dataFolder));
             _db = new ExaminationContext();
         }

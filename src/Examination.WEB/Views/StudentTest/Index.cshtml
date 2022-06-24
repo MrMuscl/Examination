@@ -29,7 +29,10 @@
                     @Html.DisplayFor(modelItem => item.Difficulty)
                 </td>
                 <td>
-                    <a asp-action="Execute" asp-route-id="@item.Id">Execute</a>
+                    @if (item.Questions.Count > 0)
+                    {
+                        <a asp-action="Execute" asp-route-id="@item.Id">Execute</a>
+                    }
                 </td>
             </tr>
         }

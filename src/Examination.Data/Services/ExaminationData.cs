@@ -216,25 +216,6 @@ namespace Examination.Data.Services
             _db.SaveChanges();
         }
 
-        public void CreateAttestation(int testId)
-        {
-            var attestation = new Attestation();
-            attestation.StartTime = DateTime.Now;
-            attestation.EndTime = DateTime.Now;
-
-            var protocols = _db.Tests
-                .Where(t => t.Id == testId)
-                .Include(t => t.Questions)
-                .ThenInclude(q => q.Protocol)
-                .SingleOrDefault()
-                .Questions
-                .Select(q => q.Protocol)
-                .ToList();
-            
-            
-            attestation.Protocols = protocols;
-        }
-
         public void AddAttestation(Attestation attestation) 
         {
             _db.Attestations.Add(attestation);
