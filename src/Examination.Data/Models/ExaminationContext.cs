@@ -43,25 +43,40 @@ namespace Examination.Data.Models
         {
             modelBuilder.Entity<Answer>(entity =>
             {
-                entity.ToTable("Answers");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("Id");
-
-                entity.Property(e => e.QuestionId).HasColumnName("QuestionId");
+                entity.Property(e => e.Text).HasMaxLength(2000);
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Answers)
                     .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_Answer_Question");
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<Attestation>(entity =>
+            modelBuilder.Entity<Question>(entity =>
             {
-                entity.ToTable("Attestations");
+                entity.Property(e => e.Text).HasMaxLength(2000);
+
+                entity.HasOne(d => d.Test)
+                    .WithMany(p => p.Questions)
+                    .HasForeignKey(d => d.TestId);
             });
-                        
+
+            modelBuilder.Entity<Protocol>(entity =>
+            {
+                entity.HasOne(d => d.Answer)
+                    .WithOne(p => p.Protocol)
+                    .HasForeignKey<Protocol>(d => d.AnswerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(d => d.Attestation)
+                    .WithMany(p => p.Protocols)
+                    .HasForeignKey(d => d.AttestationId);
+
+                entity.HasOne(d => d.Question)
+                    .WithOne(p => p.Protocol)
+                    .HasForeignKey<Protocol>(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
