@@ -15,13 +15,14 @@ namespace Examination.WEB.Controllers
         private readonly ILogger<AttestationController> _logger;
         private readonly IExaminationData _db;
 
-        public AttestationController(ILogger<AttestationController> logger)
+        public AttestationController(ILogger<AttestationController> logger, IExaminationData examinationData)
         {
             _logger = logger;
-            _db = new ExaminationData(new ExaminationContext());
+            _db = examinationData;
         }
         public IActionResult Index()
         {
+            var model = _db.GetAttestations();
             return View();
         }
     }

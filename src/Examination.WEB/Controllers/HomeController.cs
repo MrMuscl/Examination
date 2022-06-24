@@ -17,10 +17,10 @@ namespace Examination.WEB.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IExaminationData _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IExaminationData examinationData)
         {
             _logger = logger;
-            _db = new ExaminationData(new ExaminationContext());
+            _db = examinationData;
         }
 
         [HttpGet]

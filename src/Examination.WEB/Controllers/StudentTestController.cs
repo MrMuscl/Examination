@@ -16,10 +16,10 @@ namespace Examination.WEB.Controllers
         private readonly ILogger<StudentTestController> _logger;
         private readonly IExaminationData _db;
 
-        public StudentTestController(ILogger<StudentTestController> logger)
+        public StudentTestController(ILogger<StudentTestController> logger, IExaminationData examinationData)
         {
             _logger = logger;
-            _db = new ExaminationData(new ExaminationContext());
+            _db = examinationData;
         }
 
         [HttpGet]

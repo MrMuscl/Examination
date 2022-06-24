@@ -1,3 +1,5 @@
+using Examination.Data.Models;
+using Examination.Data.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,6 +25,8 @@ namespace Examination.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(ExaminationContext));
+            services.AddScoped<IExaminationData, ExaminationData>();
             services.AddControllersWithViews();
         }
 

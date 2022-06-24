@@ -16,10 +16,10 @@ namespace Examination.WEB.Controllers
         private readonly ILogger<AnswerController> _logger;
         private readonly IExaminationData _db;
 
-        public AnswerController(ILogger<AnswerController> logger)
+        public AnswerController(ILogger<AnswerController> logger, IExaminationData examinationData)
         {
             _logger = logger;
-            _db = new ExaminationData(new ExaminationContext());
+            _db = examinationData;
         }
         public IActionResult Index()
         {
