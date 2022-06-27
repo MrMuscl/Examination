@@ -19,8 +19,9 @@ namespace Examination.Data.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public bool IsActive { get; set; }
+        public int TestId { get; set; }
 
+        public Test Test { get; set; }
         public virtual ICollection<Protocol> Protocols { get; set; }
-
     }
 }

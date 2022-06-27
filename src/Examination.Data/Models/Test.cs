@@ -18,6 +18,7 @@ namespace Examination.Data.Models
         public string Name { get; set; }
         public TestDifficulty? Difficulty { get; set; }
 
+        public Attestation Attestation { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
     }
 }
