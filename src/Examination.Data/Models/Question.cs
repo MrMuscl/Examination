@@ -30,7 +30,7 @@ namespace Examination.Data.Models
         {
             get 
             {
-                return this.Answers.Where(a => a.IsValid == true).FirstOrDefault().Text;
+                return this.Answers.Where(a => a.IsValid == true).FirstOrDefault()?.Text ?? "";
             }
         }
     }

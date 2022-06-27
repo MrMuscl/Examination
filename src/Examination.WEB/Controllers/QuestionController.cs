@@ -1,5 +1,6 @@
 ﻿using Examination.Data.Models;
 using Examination.Data.Services;
+using Examination.WEB.Models;
 using Examination.WEB.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,12 @@ namespace Examination.WEB.Controllers
         public IActionResult Add(Question question, IFormCollection form)
         {
             int testId = 0;
-            Helper.GetFormIntValue(form, "TestId", out testId);
+            if (!Helper.GetFormIntValue(form, "TestId", out testId)) 
+            {
+                var errorViewModel = new ErrorViewModel();
+                errorViewModel.Message = "Unable to resolve 'TestId' value";
+                return View("Error", errorViewModel);
+            }
             
             _db.AddNewQuestionToTest(question, testId);
 
@@ -62,10 +68,20 @@ namespace Examination.WEB.Controllers
         public IActionResult Remove(Question question, IFormCollection form) 
         {
             int questionId;
-            Helper.GetFormIntValue(form, "QuestionId", out questionId);
-
+            if (!Helper.GetFormIntValue(form, "QuestionId", out questionId)) 
+            {
+                var errorViewModel = new ErrorViewModel();
+                errorViewModel.Message = "Unable to resolve 'QuestionId' value";
+                return View("Error", errorViewModel);
+            }
+            
             int testId;
-            Helper.GetFormIntValue(form, "TestId", out testId);
+            if (!Helper.GetFormIntValue(form, "TestId", out testId)) 
+            {
+                var errorViewModel = new ErrorViewModel();
+                errorViewModel.Message = "Unable to resolve 'TestId' value";
+                return View("Error", errorViewModel);
+            }
             
             _db.DeleteQuestion(questionId);
 
