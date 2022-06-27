@@ -218,12 +218,16 @@ namespace Examination.Data.Services
 
         public void AddAttestation(Attestation attestation) 
         {
+            // Remove all active attestations
+            var activeAttestations = _db.Attestations.Where(a => a.IsActive == true).ToList();
+            _db.Attestations.RemoveRange(activeAttestations);
+            
             _db.Attestations.Add(attestation);
             _db.SaveChanges();
         }
 
         
-        public  void CompleteTest(int testId)
+        public  int CompleteTest(int testId)
         {
             // Get last active attestation.
             var attestation = _db.Attestations.Where(a => a.IsActive == true).OrderByDescending(a => a.StartTime).FirstOrDefault();
@@ -239,9 +243,44 @@ namespace Examination.Data.Services
                 .Select(q => q.Protocol)
                 .ToList();
 
+            var notCompleted = _db.Tests
+                .Where(t => t.Id == testId)
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Protocol)
+                .SingleOrDefault()
+                .Questions.Where(q => q.Protocol == null).ToList();
+
+            if (notCompleted.Count() > 0) 
+            {
+                return notCompleted.First().Number;
+            }
+
             attestation.Protocols = protocols;
            
             _db.SaveChanges();
+            
+            return 0;
+        }
+
+        public IEnumerable<Attestation> GetAttestations() 
+        {
+            return _db.Attestations.Include(a => a.Protocols).ToList();
+        }
+
+        public Attestation GetAttestation(int id) 
+        {
+            return _db.Attestations.Where(a => a.Id == id).Include(a => a.Protocols).SingleOrDefault();
+        }
+
+        public Attestation GetAttestationWithQuestionsAndAnswers(int id)
+        {
+            return _db.Attestations
+                .Where(a => a.Id == id)
+                .Include(a =>a.Test)
+                .Include(a => a.Protocols)
+                .ThenInclude(p=>p.Question)
+                .ThenInclude(p=>p.Answers)
+                .SingleOrDefault();
         }
     }
 }

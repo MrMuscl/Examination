@@ -21,7 +21,7 @@ namespace Examination.Data.Services
         /// <param name="">Test id</param>
         /// <returns>Test object </returns>
         Test GetTest(int id);
-
+        
         /// <summary>
         /// Get test with specified id include related questions.
         /// </summary>
@@ -130,6 +130,25 @@ namespace Examination.Data.Services
         /// Complete test. Add protocols collection to active attestation and store end date.
         /// </summary>
         /// <param name="testId">Test id</param>
-        void CompleteTest(int testId);
-     }
+        int CompleteTest(int testId);
+
+        /// <summary>
+        /// Get attestation list
+        /// </summary>
+        IEnumerable<Attestation> GetAttestations();
+
+        /// <summary>
+        /// Get Attestation.
+        /// </summary>
+        /// <param name="id">Attestation id</param>
+        /// <returns>Attestation object</returns>
+        Attestation GetAttestation(int id);
+
+        /// <summary>
+        /// Get Attestation with related questions and answers.
+        /// </summary>
+        /// <param name="id">Attestation id</param>
+        /// <returns>Attestation object</returns>
+        Attestation GetAttestationWithQuestionsAndAnswers(int id);
+    }
 }

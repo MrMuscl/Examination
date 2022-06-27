@@ -37,6 +37,7 @@ namespace Examination.WEB.Controllers
                 var attestation = new Attestation();
                 attestation.StartTime = DateTime.Now;
                 attestation.IsActive = true;
+                attestation.TestId = id;
                 _db.AddAttestation(attestation);
             }
 
@@ -48,7 +49,7 @@ namespace Examination.WEB.Controllers
 
             if (questionNumber == null)
             {
-                question = test.Questions.FirstOrDefault();                
+                question = test.Questions.OrderBy(q => q.Number).FirstOrDefault();
             }
             else
             {
@@ -87,12 +88,13 @@ namespace Examination.WEB.Controllers
                     return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber + 1 });
                 case "Complete":
                     _db.AddProtocol(questionId, answerId);
-                    _db.CompleteTest(testId);
-                    return RedirectToAction("Index", "StudentTest");
+                    int noAnswerNumber = _db.CompleteTest(testId);
+                    if (noAnswerNumber > 0)
+                        return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = noAnswerNumber });
+                    else
+                        return RedirectToAction("Index", "StudentTest");
             }
             return RedirectToAction("Index", "StudentTest");
         }
-
-        
     }
 }
