@@ -1,5 +1,6 @@
 using Examination.Data.Models;
 using Examination.Data.Services;
+using Examination.WEB.Areas.Identity.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,12 +31,13 @@ namespace Examination.WEB
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            var str = Configuration.GetConnectionString("IdentityConnection");
-
+            //services.AddScoped(typeof(UserManager<IdentityUser>));
+            //services.AddScoped(typeof(RoleManager<IdentityRole>));
 
             services.AddScoped(typeof(ExaminationContext));
             services.AddScoped<IExaminationData, ExaminationData>();
             services.AddControllersWithViews();
+            
 
             services.AddDefaultIdentity<IdentityUser>(options =>
                 {
@@ -46,11 +48,15 @@ namespace Examination.WEB
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app,
+                              IWebHostEnvironment env,
+                              UserManager<IdentityUser> userManager,
+                              RoleManager<IdentityRole> roleManger)
         {
             if (env.IsDevelopment())
             {
@@ -69,6 +75,8 @@ namespace Examination.WEB
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            IdentityDataInitializer.SeedData(userManager, roleManger);
 
             app.UseEndpoints(endpoints =>
             {

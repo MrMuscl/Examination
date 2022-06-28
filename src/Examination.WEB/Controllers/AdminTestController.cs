@@ -1,6 +1,7 @@
 ﻿using Examination.Data.Models;
 using Examination.Data.Services;
 using Examination.WEB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace Examination.WEB.Controllers
 {
+    
+    [Authorize(Roles = "Administrator")]
     public class AdminTestController : Controller
     {
         private readonly ILogger<AdminTestController> _logger;
