@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Examination.Data.Models.Protocol>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detatils of the test: @ViewBag.TestName</h1>
+
+<p>
+    
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                №
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Question)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answer.IsValid)
+            </th>
+            <th>
+                Correct answer
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.Answer.IsValid)
+            {
+                <tr class="alert-success">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Question.Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Question.Text)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Answer.Text)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Answer.IsValid)
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr class="alert-danger">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Question.Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Question.Text)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Answer.Text)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Answer.IsValid)
+                    </td>
+                    <td>
+                        @item.Question.CorrectAnswer
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-controller="Attestation" asp-action="Index">Back to List</a>
+</div>
+
