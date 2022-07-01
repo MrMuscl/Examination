@@ -15,12 +15,12 @@ namespace Examination.WEB.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IExaminationData _db;
+        private readonly IExaminationData _examinationDataProvider;
 
-        public HomeController(ILogger<HomeController> logger, IExaminationData examinationData)
+        public HomeController(ILogger<HomeController> logger, IExaminationData examinationDataPrivider)
         {
             _logger = logger;
-            _db = examinationData;
+            _examinationDataProvider = examinationDataPrivider;
         }
 
         [HttpGet]

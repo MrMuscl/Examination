@@ -16,12 +16,12 @@ namespace Examination.WEB.Controllers
     public class QuestionController : Controller
     {
         private readonly ILogger<QuestionController> _logger;
-        private readonly IExaminationData _db;
+        private readonly IExaminationData _examinationDataProvider;
 
-        public QuestionController(ILogger<QuestionController> logger, IExaminationData examinationData)
+        public QuestionController(ILogger<QuestionController> logger, IExaminationData examinationDataProvider)
         {
             _logger = logger;
-            _db = examinationData;
+            _examinationDataProvider = examinationDataProvider;
         }
         public IActionResult Index()
         {
@@ -31,7 +31,7 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Add(int id) 
         {
-            var test = _db.GetTest(id);
+            var test = _examinationDataProvider.GetTest(id);
             ViewBag.Test = test;
             return View();
         }
@@ -46,7 +46,7 @@ namespace Examination.WEB.Controllers
                 return View("Error", errorViewModel);
             }
             
-            _db.AddNewQuestionToTest(question, testId);
+            _examinationDataProvider.AddNewQuestionToTest(question, testId);
 
             return RedirectToAction("Index", "AdminTest", new { Id = testId });
         }
@@ -54,7 +54,7 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Remove(int id, int? testId) 
         {
-            var model = _db.GetQuestion(id);
+            var model = _examinationDataProvider.GetQuestion(id);
             if (testId != null) 
             {
                 ViewBag.TestId = testId.Value;
@@ -83,7 +83,7 @@ namespace Examination.WEB.Controllers
                 return View("Error", errorViewModel);
             }
             
-            _db.DeleteQuestion(questionId);
+            _examinationDataProvider.DeleteQuestion(questionId);
 
             return RedirectToAction("Index", "Admintest", new { id = testId});
         }
@@ -91,7 +91,7 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Edit(int id, int? testId)
         {
-            var question = _db.GetQuestion(id);
+            var question = _examinationDataProvider.GetQuestion(id);
             ViewBag.QuestionNumber = question.Number;
 
             if (testId != null)
@@ -111,7 +111,7 @@ namespace Examination.WEB.Controllers
             Helper.GetFormIntValue(form, "QuestionNumber", out questionNumber);
             
             question.Number = questionNumber;
-            _db.UpdateQuestion(question);
+            _examinationDataProvider.UpdateQuestion(question);
 
             return RedirectToAction("Index", "AdminTest", new { id = testId });
         }

@@ -14,12 +14,12 @@ namespace Examination.WEB.Controllers
     public class AnswerController : Controller
     {
         private readonly ILogger<AnswerController> _logger;
-        private readonly IExaminationData _db;
+        private readonly IExaminationData _examinationDataProvider;
 
-        public AnswerController(ILogger<AnswerController> logger, IExaminationData examinationData)
+        public AnswerController(ILogger<AnswerController> logger, IExaminationData examinationDataProvider)
         {
             _logger = logger;
-            _db = examinationData;
+            _examinationDataProvider = examinationDataProvider;
         }
         public IActionResult Index()
         {
@@ -31,13 +31,13 @@ namespace Examination.WEB.Controllers
         {
             if (questionId != null) 
             {
-                var question = _db.GetQuestion(questionId.Value);
+                var question = _examinationDataProvider.GetQuestion(questionId.Value);
                 ViewBag.Question = question;
             }
 
             if (testId != null)
             {
-                var test = _db.GetTest(testId.Value);
+                var test = _examinationDataProvider.GetTest(testId.Value);
                 ViewBag.Test = test;
             }
 
@@ -74,7 +74,7 @@ namespace Examination.WEB.Controllers
                 return null; // NotFoundObjectResult;
             }
 
-            _db.AddNewAnswerToQuestion(answer, questionId);
+            _examinationDataProvider.AddNewAnswerToQuestion(answer, questionId);
             
             return RedirectToAction("Index", "AdminTest", new { Id = testId, questionId = questionId});
         }
@@ -82,7 +82,7 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Edit(int id, int questionId, int testId) 
         {
-            var model = _db.GetAnswer(id);
+            var model = _examinationDataProvider.GetAnswer(id);
 
             ViewBag.TestId = testId;
             ViewBag.QuestionId = questionId;
@@ -120,7 +120,7 @@ namespace Examination.WEB.Controllers
                 return null; // NotFoundObjectResult;
             }
 
-            _db.UpdateAnswer(answer);
+            _examinationDataProvider.UpdateAnswer(answer);
             return RedirectToAction("Index", "AdminTest", new { Id = testId, questionId = questionId });
         }
 
@@ -130,7 +130,7 @@ namespace Examination.WEB.Controllers
             ViewBag.QuestionId = questionId;
             ViewBag.TestId = testId;
 
-            var model = _db.GetAnswer(id);
+            var model = _examinationDataProvider.GetAnswer(id);
             return View(model);
         }
 
@@ -163,7 +163,7 @@ namespace Examination.WEB.Controllers
                 // TODO: handle errors.
                 return null; // NotFoundObjectResult;
             }
-            _db.DeleteAnswer(answer.Id);
+            _examinationDataProvider.DeleteAnswer(answer.Id);
             return RedirectToAction("Index", "AdminTest", new { Id = testId, questionId = questionId });
         }
 

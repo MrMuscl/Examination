@@ -14,18 +14,18 @@ namespace Examination.WEB.Controllers
     public class StudentTestController : Controller
     {
         private readonly ILogger<StudentTestController> _logger;
-        private readonly IExaminationData _db;
+        private readonly IExaminationData _examinationDataProvider;
 
-        public StudentTestController(ILogger<StudentTestController> logger, IExaminationData examinationData)
+        public StudentTestController(ILogger<StudentTestController> logger, IExaminationData examinationDataProvider)
         {
             _logger = logger;
-            _db = examinationData;
+            _examinationDataProvider = examinationDataProvider;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var model = _db.GetTests();
+            var model = _examinationDataProvider.GetTests();
             return View(model);
         }
 
@@ -38,11 +38,11 @@ namespace Examination.WEB.Controllers
                 attestation.StartTime = DateTime.Now;
                 attestation.IsActive = true;
                 attestation.TestId = id;
-                _db.AddAttestation(attestation);
+                _examinationDataProvider.AddAttestation(attestation);
             }
 
             Question question;
-            var test = _db.GetTestWithQuestionsAndAnswers(id);
+            var test = _examinationDataProvider.GetTestWithQuestionsAndAnswers(id);
             ViewBag.QuestionNumber = questionNumber?? 1;
             ViewBag.QuestionCount = test.Questions.Count();
             ViewBag.TestId = id;
@@ -81,14 +81,14 @@ namespace Examination.WEB.Controllers
             switch (navigationBtn) 
             {
                 case "Prev":
-                    _db.AddProtocol(questionId, answerId);
+                    _examinationDataProvider.AddProtocol(questionId, answerId);
                     return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber - 1 });
                 case "Next":
-                    _db.AddProtocol(questionId, answerId);
+                    _examinationDataProvider.AddProtocol(questionId, answerId);
                     return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber + 1 });
                 case "Complete":
-                    _db.AddProtocol(questionId, answerId);
-                    int noAnswerNumber = _db.CompleteTest(testId);
+                    _examinationDataProvider.AddProtocol(questionId, answerId);
+                    int noAnswerNumber = _examinationDataProvider.CompleteTest(testId);
                     if (noAnswerNumber > 0)
                         return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = noAnswerNumber });
                     else

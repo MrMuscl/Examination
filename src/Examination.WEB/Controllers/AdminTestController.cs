@@ -18,18 +18,18 @@ namespace Examination.WEB.Controllers
     public class AdminTestController : Controller
     {
         private readonly ILogger<AdminTestController> _logger;
-        private readonly IExaminationData _db;
+        private readonly IExaminationData _examinationDataProvider;
 
-        public AdminTestController(ILogger<AdminTestController> logger, IExaminationData examinationData)
+        public AdminTestController(ILogger<AdminTestController> logger, IExaminationData examinationDataProvider)
         {
             _logger = logger;
-            _db = examinationData;
+            _examinationDataProvider = examinationDataProvider;
         }
 
         public IActionResult Index(int? id, int? questionId)
         {
             var model = new TestsIndexViewModel();
-            model.Tests = _db.GetTests();
+            model.Tests = _examinationDataProvider.GetTests();
 
             if (id != null) 
             {
@@ -59,7 +59,7 @@ namespace Examination.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.AddTest(test);
+                _examinationDataProvider.AddTest(test);
                 return RedirectToAction("Index", "AdminTest");
             }
             return View();
@@ -68,14 +68,14 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var model = _db.GetTest(id);
+            var model = _examinationDataProvider.GetTest(id);
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Delete(int id, IFormCollection formCol)
         {
-            _db.DeleteTest(id);
+            _examinationDataProvider.DeleteTest(id);
             return RedirectToAction("Index", "AdminTest");
         }
 
@@ -83,14 +83,14 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Edit(int id) 
         {
-            var model = _db.GetTest(id);
+            var model = _examinationDataProvider.GetTest(id);
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Edit(Test test, IFormCollection form)
         {
-            _db.UpdateTest(test);
+            _examinationDataProvider.UpdateTest(test);
             
             return RedirectToAction("Index", "AdminTest");
         }

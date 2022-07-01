@@ -14,22 +14,22 @@ namespace Examination.WEB.Controllers
     {
 
         private readonly ILogger<AttestationController> _logger;
-        private readonly IExaminationData _db;
+        private readonly IExaminationData _examinationDataProvider;
 
-        public AttestationController(ILogger<AttestationController> logger, IExaminationData examinationData)
+        public AttestationController(ILogger<AttestationController> logger, IExaminationData examinationDataProvider)
         {
             _logger = logger;
-            _db = examinationData;
+            _examinationDataProvider = examinationDataProvider;
         }
         
         [HttpGet]
         public IActionResult Index()
         {
             List<AttestationItemViewModel> model = new List<AttestationItemViewModel>();
-            var attestations = _db.GetAttestations();
+            var attestations = _examinationDataProvider.GetAttestations();
             foreach (var attestation in attestations) 
             {
-                var test = _db.GetTest(attestation.TestId);
+                var test = _examinationDataProvider.GetTest(attestation.TestId);
                 var item = new AttestationItemViewModel { Attestation = attestation, Test = test };
                 model.Add(item);
             }
@@ -40,7 +40,7 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Details(int id) 
         {
-            Attestation attestation = _db.GetAttestationWithQuestionsAndAnswers(id);
+            Attestation attestation = _examinationDataProvider.GetAttestationWithQuestionsAndAnswers(id);
             var model = attestation.Protocols;
             ViewBag.TestName = attestation.Test?.Name;
             
