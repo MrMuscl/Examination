@@ -8,15 +8,47 @@ using System.Threading.Tasks;
 
 namespace Examination.Data.Services
 {
-    public class ExaminationData : IExaminationData
+    public class ExaminationData : IExaminationData, IDisposable
     {
         ExaminationContext _db;
+        bool _disposed = false;
 
+        public ExaminationContext GetExaminationContext { get { return _db; } }
         public ExaminationData(ExaminationContext db)
         {
             _db = db;
         }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        ~ExaminationData() 
+        {
+            Dispose(false);
+        }
 
+        void Dispose(bool fromDispose) 
+        {
+            if (!_disposed) 
+            {
+                // Dispose all managed resources.
+                if (fromDispose) 
+                {
+                    _db.Dispose();
+                }
+                // Disposed all unmanaged resourses here.
+            }
+
+            _disposed = true;
+        }
+
+        public void SeedTestData() 
+        {
+            var initializer = new ExaminationDbInitializer();
+            initializer.SeedTestData();
+        }
+        
         public bool EnsureDbCreated() => _db.Database.EnsureCreated();
 
         public void AddTest(Test test)

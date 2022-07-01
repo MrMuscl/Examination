@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace Examination.WEB.Controllers
 {
-    
+
+
     [Authorize(Roles = "Administrator")]
     public class AdminTestController : Controller
     {
@@ -78,6 +79,7 @@ namespace Examination.WEB.Controllers
             return RedirectToAction("Index", "AdminTest");
         }
 
+        
         [HttpGet]
         public IActionResult Edit(int id) 
         {

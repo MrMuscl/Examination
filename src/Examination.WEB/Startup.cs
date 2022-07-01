@@ -29,12 +29,10 @@ namespace Examination.WEB
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
-
-            //services.AddScoped(typeof(UserManager<IdentityUser>));
-            //services.AddScoped(typeof(RoleManager<IdentityRole>));
-
+                    options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                                   
             services.AddScoped(typeof(ExaminationContext));
+            services.AddScoped(typeof(ExaminationData));
             services.AddScoped<IExaminationData, ExaminationData>();
             services.AddControllersWithViews();
             
@@ -58,6 +56,25 @@ namespace Examination.WEB
                               UserManager<IdentityUser> userManager,
                               RoleManager<IdentityRole> roleManger)
         {
+            bool dbWasCreated = false;
+            using (var scope = app.ApplicationServices.CreateScope()) 
+            {
+                using (var identityContext = scope.ServiceProvider.GetService<AppDbContext>()) 
+                {
+                    if (identityContext.Database.EnsureCreated())
+                        IdentityDataInitializer.SeedData(userManager, roleManger);
+
+                    using (var examinationData = scope.ServiceProvider.GetService<ExaminationData>()) 
+                    {
+                        dbWasCreated = examinationData.GetExaminationContext?.Database.EnsureCreated() ?? false;
+                        if (dbWasCreated)
+                        {
+                            examinationData.SeedTestData();
+                        }
+                    }
+                }
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -68,6 +85,7 @@ namespace Examination.WEB
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -75,9 +93,7 @@ namespace Examination.WEB
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            IdentityDataInitializer.SeedData(userManager, roleManger);
-
+                        
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -86,13 +102,6 @@ namespace Examination.WEB
                 
                 endpoints.MapRazorPages();
             });
-            
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "tests",
-            //        pattern: "{controller=Home}/{action=tests}");
-            //});
         }
     }
 }
