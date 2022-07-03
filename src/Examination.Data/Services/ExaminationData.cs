@@ -11,7 +11,7 @@ namespace Examination.Data.Services
     public class ExaminationData : IExaminationData, IDisposable
     {
         ExaminationContext _db;
-        bool _disposed = false;
+        private bool _disposed = false;
 
         public ExaminationContext GetExaminationContext { get { return _db; } }
         public ExaminationData(ExaminationContext db)
@@ -96,7 +96,7 @@ namespace Examination.Data.Services
             return _db.Tests
             .Where(t => t.Id == id)
             .Include(t => t.Questions).ThenInclude(q => q.Answers)
-            .Include(t => t.Questions).ThenInclude(q => q.Protocol)
+            .Include(t => t.Questions).ThenInclude(q => q.Protocols)
             .SingleOrDefault();
         }
 
@@ -224,27 +224,34 @@ namespace Examination.Data.Services
                 .FirstOrDefault();
         }
 
-        public void AddProtocol(int questionId, int answerId) 
+        public void AddProtocol(int questionId, int answerId, string userName) 
         {
-            // Check if the question has no protocol yet.
-            var question = _db.Questions.Where(q => q.Id == questionId).Include(q => q.Protocol).FirstOrDefault();
+            var question = _db.Questions.Where(q => q.Id == questionId).Include(q => q.Protocols).FirstOrDefault();
             var answer = _db.Answers.Where(a => a.Id == answerId).FirstOrDefault();
             if (answer == null)
                 return;
 
-            if (question == null /*|| answer == null*/)
-                throw new Exception("Either question or answer objects cannot be retrieved");
+            if (question == null)
+                throw new NullReferenceException("Question");
 
-            if (question.Protocol == null)
+            // If there is no protocol for current user in active attestation for this question - create one...
+            var protocol = _db.Attestations
+                .Where(a => a.IsActive == true && a.UserName == userName)
+                .Include(a => a.Protocols)
+                .OrderByDescending(a => a.StartTime)
+                .FirstOrDefault()?.Protocols.Where(p => p.QuestionId == questionId).FirstOrDefault();
+
+            if (protocol == null)
             {
-                var protocol = new Protocol { Question = question, Answer = answer };
+                protocol = new Protocol { Question = question, Answer = answer, Attestation = GetLastActiveAttestation() };
                 _db.Protocols.Add(protocol);
             }
             else 
             {
-                question.Protocol.AnswerId = answerId;
+                // ... otherwise update existing protocol.
+                protocol.AnswerId = answerId;
             }
-
+                        
             _db.SaveChanges();
         }
 
@@ -258,36 +265,30 @@ namespace Examination.Data.Services
             _db.SaveChanges();
         }
 
-        
+        public Attestation GetLastActiveAttestation() 
+        {
+            return _db.Attestations.Where(a => a.IsActive == true).OrderByDescending(a => a.StartTime).FirstOrDefault();
+        }
+                
         public  int CompleteTest(int testId)
         {
-            // Get last active attestation.
-            var attestation = _db.Attestations.Where(a => a.IsActive == true).OrderByDescending(a => a.StartTime).FirstOrDefault();
+            var attestation = GetLastActiveAttestation();
             attestation.EndTime = DateTime.Now;
             attestation.IsActive = false;
-
-            var protocols = _db.Tests
-                .Where(t => t.Id == testId)
-                .Include(t => t.Questions)
-                .ThenInclude(q => q.Protocol)
-                .SingleOrDefault()
-                .Questions
-                .Select(q => q.Protocol)
-                .ToList();
 
             var notCompleted = _db.Tests
                 .Where(t => t.Id == testId)
                 .Include(t => t.Questions)
-                .ThenInclude(q => q.Protocol)
+                .ThenInclude(q => q.Protocols)
                 .SingleOrDefault()
-                .Questions.Where(q => q.Protocol == null).ToList();
+                .Questions.Where(q => q.Protocols == null).ToList();
 
             if (notCompleted.Count() > 0) 
             {
                 return notCompleted.First().Number;
             }
 
-            attestation.Protocols = protocols;
+            //attestation.Protocols = protocols;
            
             _db.SaveChanges();
             
@@ -313,6 +314,13 @@ namespace Examination.Data.Services
                 .ThenInclude(p=>p.Question)
                 .ThenInclude(p=>p.Answers)
                 .SingleOrDefault();
+        }
+        public Protocol GetProtocolForQuestion(int questionId)
+        {
+            var question = _db.Questions.Where(q => q.Id == questionId).Include(q => q.Protocols).SingleOrDefault();
+            var attestation = GetLastActiveAttestation();
+
+            return question.Protocols.Where(p => p.Attestation.Id == attestation.Id).FirstOrDefault();
         }
     }
 }

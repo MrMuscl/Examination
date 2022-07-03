@@ -14,10 +14,17 @@ namespace Examination.Data.Services
         private string _dataFolder = "";
         private ExaminationContext _db;
 
-        public ExaminationDbInitializer()
+        /// <summary>
+        /// Constrctor.
+        /// </summary>
+        /// <param name="path">Path to the directory where sample files are located.</param>
+        public ExaminationDbInitializer(string  path = null)
         {
-            
-            _dataFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\DB\Data\Industry_light"));
+            if (string.IsNullOrEmpty(path))
+                _dataFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\DB\Data\Industry_light"));
+            else
+                _dataFolder = path;
+
             _files = new List<string>(Directory.GetFiles(_dataFolder));
             _db = new ExaminationContext();
         }
@@ -30,7 +37,7 @@ namespace Examination.Data.Services
             var answer = new Answer();
             int questionNumber = 1;
 
-            for (int i = 0; i < lines.Count() - 1; i++)
+            for (int i = 0; i < lines.Count(); i++)
             {
                 if (lines[i].StartsWith('#'))
                 {

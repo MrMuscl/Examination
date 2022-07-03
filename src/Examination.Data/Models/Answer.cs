@@ -10,6 +10,10 @@ namespace Examination.Data.Models
 {
     public partial class Answer
     {
+        public Answer() 
+        {
+            Protocols = new HashSet<Protocol>();
+        }
         public int Id { get; set; }
         //[DataType(DataType.Text)] - don't work
         //[Column(TypeName = "text")]// this works
@@ -17,9 +21,9 @@ namespace Examination.Data.Models
         public string Text { get; set; }
         [Display(Name = "Is Correct")]
         public bool IsValid { get; set; }
-
         public int QuestionId { get; set; }
+        
         public virtual Question Question { get; set; }
-        public virtual Protocol Protocol { get; set; }
+        public virtual IEnumerable<Protocol> Protocols { get; set; }
     }
 }

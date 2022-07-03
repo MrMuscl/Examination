@@ -63,8 +63,8 @@ namespace Examination.Data.Models
             modelBuilder.Entity<Protocol>(entity =>
             {
                 entity.HasOne(d => d.Answer)
-                    .WithOne(p => p.Protocol)
-                    .HasForeignKey<Protocol>(d => d.AnswerId)
+                    .WithMany(p => p.Protocols)
+                    .HasForeignKey(d => d.AnswerId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(d => d.Attestation)
@@ -72,8 +72,8 @@ namespace Examination.Data.Models
                     .HasForeignKey(d => d.AttestationId);
 
                 entity.HasOne(d => d.Question)
-                    .WithOne(p => p.Protocol)
-                    .HasForeignKey<Protocol>(d => d.QuestionId)
+                    .WithMany(p => p.Protocols)
+                    .HasForeignKey(d => d.QuestionId)
                     .OnDelete(DeleteBehavior.NoAction);
             });
 

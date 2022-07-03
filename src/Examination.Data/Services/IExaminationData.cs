@@ -118,7 +118,8 @@ namespace Examination.Data.Services
         /// </summary>
         /// <param name="questionId">Question id</param>
         /// <param name="answerId">Answer id</param>
-        void AddProtocol(int questionId, int answerId);
+        /// <param name="userName">Current user name</param>
+        void AddProtocol(int questionId, int answerId, string userName);
 
         /// <summary>
         /// Add new attestation.
@@ -150,5 +151,12 @@ namespace Examination.Data.Services
         /// <param name="id">Attestation id</param>
         /// <returns>Attestation object</returns>
         Attestation GetAttestationWithQuestionsAndAnswers(int id);
+        
+        /// <summary>
+        /// Get protocol for specified question.
+        /// </summary>
+        /// <param name="questionId">Question Id</param>
+        /// <returns>Protocol object</returns>
+        Protocol GetProtocolForQuestion(int questionId);
     }
 }

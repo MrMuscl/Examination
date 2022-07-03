@@ -11,6 +11,7 @@ namespace Examination.Data.Models
         public Test()
         {
             Questions = new HashSet<Question>();
+            Attestations = new HashSet<Attestation>();
         }
 
         public int Id { get; set; }
@@ -18,7 +19,7 @@ namespace Examination.Data.Models
         public string Name { get; set; }
         public TestDifficulty? Difficulty { get; set; }
 
-        public Attestation Attestation { get; set; }
+        public ICollection<Attestation> Attestations { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
     }
 }
