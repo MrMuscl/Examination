@@ -19,5 +19,16 @@ namespace Examination.WEB.Utils
 
             return res;
         }
+
+        public static bool GetFormStringValue(IFormCollection form, string key, out string value)
+        {
+            bool res = true;
+            StringValues svValue;
+
+            res = form.TryGetValue(key, out svValue);
+            value = svValue.ToString();
+
+            return res;
+        }
     }
 }

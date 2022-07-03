@@ -66,6 +66,7 @@ namespace Examination.WEB
 
                     using (var examinationData = scope.ServiceProvider.GetService<ExaminationData>()) 
                     {
+                        //examinationData.GetExaminationContext.Database.EnsureDeleted();
                         dbWasCreated = examinationData.GetExaminationContext?.Database.EnsureCreated() ?? false;
                         if (dbWasCreated)
                         {

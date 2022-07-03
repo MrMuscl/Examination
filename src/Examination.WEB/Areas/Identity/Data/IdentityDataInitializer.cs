@@ -42,6 +42,19 @@ namespace Examination.WEB.Areas.Identity.Data
                     userManager.AddToRoleAsync(ivanUser, "Student").Wait();
                 }
             }
+
+            if (userManager.FindByNameAsync("Alex").Result == null)
+            {
+                var alexUser = new IdentityUser();
+                alexUser.UserName = "Alex";
+                alexUser.Email = "alex@examination.ru";
+
+                var res = userManager.CreateAsync(alexUser, "Alex$").Result;
+                if (res.Succeeded)
+                {
+                    userManager.AddToRoleAsync(alexUser, "Student").Wait();
+                }
+            }
         }
 
         public static void SeedRoles(RoleManager<IdentityRole> roleManager) 
