@@ -65,11 +65,12 @@ namespace Examination.Data.Models
                 entity.HasOne(d => d.Answer)
                     .WithMany(p => p.Protocols)
                     .HasForeignKey(d => d.AnswerId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.Attestation)
                     .WithMany(p => p.Protocols)
-                    .HasForeignKey(d => d.AttestationId);
+                    .HasForeignKey(d => d.AttestationId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Protocols)

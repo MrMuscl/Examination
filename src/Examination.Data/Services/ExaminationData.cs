@@ -317,10 +317,15 @@ namespace Examination.Data.Services
         }
         public Protocol GetProtocolForQuestion(int questionId)
         {
-            var question = _db.Questions.Where(q => q.Id == questionId).Include(q => q.Protocols).SingleOrDefault();
+            var question = _db.Questions
+                .Where(q => q.Id == questionId)
+                .Include(q => q.Protocols)
+                .ThenInclude(p=>p.Attestation)
+                .SingleOrDefault();
+
             var attestation = GetLastActiveAttestation();
 
-            return question.Protocols.Where(p => p.Attestation.Id == attestation.Id).FirstOrDefault();
+            return question.Protocols.Where(p => p?.Attestation?.Id == attestation.Id).FirstOrDefault();
         }
     }
 }
