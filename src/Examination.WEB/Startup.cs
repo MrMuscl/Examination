@@ -28,8 +28,11 @@ namespace Examination.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ExaminationConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.AddOptions();
+
             services.AddDbContext<AppDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                    options.UseSqlServer(Configuration.GetConnectionString("IdentityDbConnectionString")));
                                    
             services.AddScoped(typeof(ExaminationContext));
             services.AddScoped(typeof(ExaminationData));

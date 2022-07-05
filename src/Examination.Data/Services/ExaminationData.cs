@@ -45,7 +45,7 @@ namespace Examination.Data.Services
 
         public void SeedTestData() 
         {
-            var initializer = new ExaminationDbInitializer();
+            var initializer = new ExaminationDbInitializer(_db);
             initializer.SeedTestData();
         }
         
@@ -287,8 +287,6 @@ namespace Examination.Data.Services
             {
                 return notCompleted.First().Number;
             }
-
-            //attestation.Protocols = protocols;
            
             _db.SaveChanges();
             

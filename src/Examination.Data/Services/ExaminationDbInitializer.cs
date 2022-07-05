@@ -17,8 +17,9 @@ namespace Examination.Data.Services
         /// <summary>
         /// Constrctor.
         /// </summary>
+        /// <param name="db">Instance of ExaminationContext.</param>
         /// <param name="path">Path to the directory where sample files are located.</param>
-        public ExaminationDbInitializer(string  path = null)
+        public ExaminationDbInitializer(ExaminationContext db, string  path = null)
         {
             if (string.IsNullOrEmpty(path))
                 _dataFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\DB\Data\Industry_light"));
@@ -26,7 +27,7 @@ namespace Examination.Data.Services
                 _dataFolder = path;
 
             _files = new List<string>(Directory.GetFiles(_dataFolder));
-            _db = new ExaminationContext();
+            _db = db;
         }
 
         public List<Question> ParseQuestions(string path)

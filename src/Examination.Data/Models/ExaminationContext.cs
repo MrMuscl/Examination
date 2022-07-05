@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 #nullable disable
 
@@ -9,8 +10,8 @@ namespace Examination.Data.Models
 {
     public partial class ExaminationContext : DbContext
     {
-        const string DATABASE_NAME = "ExaminationCodeFirst";
-        static string _connectionString = $"data source=ANTONK-573;Initial Catalog={DATABASE_NAME};Integrated Security=True;";
+        private IOptions<ExaminationConnectionStrings> _options;
+
         public ExaminationContext()
         {
         }
@@ -18,6 +19,11 @@ namespace Examination.Data.Models
         public ExaminationContext(DbContextOptions<ExaminationContext> options)
             : base(options)
         {
+        }
+
+        public ExaminationContext(IOptions<ExaminationConnectionStrings> options) 
+        {
+            _options = options;
         }
 
         public virtual DbSet<Answer> Answers { get; set; }
@@ -30,7 +36,7 @@ namespace Examination.Data.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(_connectionString)
+                optionsBuilder.UseSqlServer(_options.Value.ExaminationDbConnectionString)
                     .LogTo(Console.WriteLine,
                         new[] { DbLoggerCategory.Database.Command.Name,
                                 DbLoggerCategory.Database.Transaction.Name},
