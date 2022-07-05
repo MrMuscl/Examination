@@ -19,6 +19,8 @@ namespace Examination.Data.Models
         public string Name { get; set; }
         public TestDifficulty? Difficulty { get; set; }
 
+        public int ErrorThreshold { get; set; }
+
         public ICollection<Attestation> Attestations { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
     }

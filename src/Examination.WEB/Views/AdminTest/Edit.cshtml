@@ -20,6 +20,11 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ErrorThreshold" class="control-label">Error threshold</label>
+                <input asp-for="ErrorThreshold" class="form-control" />
+                <span asp-validation-for="ErrorThreshold" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Difficulty" class="control-label"></label>
                 <select asp-for="Difficulty" class="form-control" asp-items="Html.GetEnumSelectList<TestDifficulty>()"></select>
                 <span asp-validation-for="Difficulty" class="text-danger"></span>

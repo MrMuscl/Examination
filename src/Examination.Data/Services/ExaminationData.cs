@@ -224,12 +224,12 @@ namespace Examination.Data.Services
                 .FirstOrDefault();
         }
 
-        public void AddProtocol(int questionId, int answerId, string userName) 
+        public int AddProtocol(int questionId, int answerId, string userName) 
         {
             var question = _db.Questions.Where(q => q.Id == questionId).Include(q => q.Protocols).FirstOrDefault();
             var answer = _db.Answers.Where(a => a.Id == answerId).FirstOrDefault();
             if (answer == null)
-                return;
+                return 0;
 
             if (question == null)
                 throw new NullReferenceException("Question");
@@ -243,7 +243,7 @@ namespace Examination.Data.Services
 
             if (protocol == null)
             {
-                protocol = new Protocol { Question = question, Answer = answer, Attestation = GetLastActiveAttestation() };
+                protocol = new Protocol { Question = question, Answer = answer, Attestation = GetLastActiveAttestation(userName) };
                 _db.Protocols.Add(protocol);
             }
             else 
@@ -253,6 +253,7 @@ namespace Examination.Data.Services
             }
                         
             _db.SaveChanges();
+            return GetLastActiveAttestation(userName).Id;
         }
 
         public void AddAttestation(Attestation attestation) 
@@ -265,14 +266,17 @@ namespace Examination.Data.Services
             _db.SaveChanges();
         }
 
-        public Attestation GetLastActiveAttestation() 
+        public Attestation GetLastActiveAttestation(string userName) 
         {
-            return _db.Attestations.Where(a => a.IsActive == true).OrderByDescending(a => a.StartTime).FirstOrDefault();
+            return _db.Attestations
+                .Where(a => a.IsActive == true && a.UserName == userName)
+                .OrderByDescending(a => a.StartTime)
+                .FirstOrDefault();
         }
                 
-        public  int CompleteTest(int testId)
+        public int CompleteTest(int testId, string userName)
         {
-            var attestation = GetLastActiveAttestation();
+            var attestation = GetLastActiveAttestation(userName);
             attestation.EndTime = DateTime.Now;
             attestation.IsActive = false;
 
@@ -313,7 +317,7 @@ namespace Examination.Data.Services
                 .ThenInclude(p=>p.Answers)
                 .SingleOrDefault();
         }
-        public Protocol GetProtocolForQuestion(int questionId)
+        public Protocol GetProtocolForQuestion(int questionId, string userName)
         {
             var question = _db.Questions
                 .Where(q => q.Id == questionId)
@@ -321,7 +325,7 @@ namespace Examination.Data.Services
                 .ThenInclude(p=>p.Attestation)
                 .SingleOrDefault();
 
-            var attestation = GetLastActiveAttestation();
+            var attestation = GetLastActiveAttestation(userName);
 
             return question.Protocols.Where(p => p?.Attestation?.Id == attestation.Id).FirstOrDefault();
         }

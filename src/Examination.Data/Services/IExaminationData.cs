@@ -119,7 +119,8 @@ namespace Examination.Data.Services
         /// <param name="questionId">Question id</param>
         /// <param name="answerId">Answer id</param>
         /// <param name="userName">Current user name</param>
-        void AddProtocol(int questionId, int answerId, string userName);
+        /// <returns>The id of attestation that owns the protocol</returns>
+        int AddProtocol(int questionId, int answerId, string userName);
 
         /// <summary>
         /// Add new attestation.
@@ -131,7 +132,9 @@ namespace Examination.Data.Services
         /// Complete test. Add protocols collection to active attestation and store end date.
         /// </summary>
         /// <param name="testId">Test id</param>
-        int CompleteTest(int testId);
+        /// <param name="userName">The name of the user, that executes test</param>
+        /// If there are not aswered questions, returns the Id on the first one.
+        int CompleteTest(int testId, string userName);
 
         /// <summary>
         /// Get attestation list
@@ -157,6 +160,6 @@ namespace Examination.Data.Services
         /// </summary>
         /// <param name="questionId">Question Id</param>
         /// <returns>Protocol object</returns>
-        Protocol GetProtocolForQuestion(int questionId);
+        Protocol GetProtocolForQuestion(int questionId, string userName);
     }
 }

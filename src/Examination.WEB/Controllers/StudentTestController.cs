@@ -1,5 +1,6 @@
 ﻿using Examination.Data.Models;
 using Examination.Data.Services;
+using Examination.WEB.Models;
 using Examination.WEB.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -69,11 +70,7 @@ namespace Examination.WEB.Controllers
                 question = test.Questions.Where(q => q.Number == questionNumber).FirstOrDefault();
             }
 
-            //if (question == null)
-            //    return NotFoundResult
-            //ViewBag.CheckedAnswer = question.Protocol?.AnswerId ?? 0;
-
-            var protocol = _examinationDataProvider.GetProtocolForQuestion(question.Id);
+            var protocol = _examinationDataProvider.GetProtocolForQuestion(question.Id, user.UserName);
             ViewBag.CheckedAnswer = protocol?.AnswerId ?? 0;
             
             return View(question);
@@ -106,14 +103,42 @@ namespace Examination.WEB.Controllers
                     _examinationDataProvider.AddProtocol(questionId, answerId, userName);
                     return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber + 1 });
                 case "Complete":
-                    _examinationDataProvider.AddProtocol(questionId, answerId, userName);
-                    int noAnswerNumber = _examinationDataProvider.CompleteTest(testId);
+                    int attestationId;
+                    attestationId = _examinationDataProvider.AddProtocol(questionId, answerId, userName);
+                    int noAnswerNumber = _examinationDataProvider.CompleteTest(testId, userName);
                     if (noAnswerNumber > 0)
                         return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = noAnswerNumber });
                     else
-                        return RedirectToAction("Index", "StudentTest");
+                        return RedirectToAction("TestResult", "StudentTest", new { Id = attestationId});
             }
             return RedirectToAction("Index", "StudentTest");
+        }
+
+        [HttpGet]
+        public IActionResult TestResult(int id)
+        {
+            int correctCount = 0;
+            int incorrectCount = 0;
+            var attestation = _examinationDataProvider.GetAttestationWithQuestionsAndAnswers(id);
+            var test = _examinationDataProvider.GetTest(attestation.TestId);
+            foreach (var protocol in attestation.Protocols) 
+            {
+                if (protocol.Answer.IsValid)
+                    correctCount++;
+                else
+                    incorrectCount++;
+            }
+
+            var model = new TestResultsViewMode
+            {
+                Test = test,
+                Attestation = attestation,
+                CorrectCount = correctCount,
+                IncorrectCount = incorrectCount,
+                IsPassed = incorrectCount <= test.ErrorThreshold                
+            };
+
+            return View(model);
         }
     }
 }

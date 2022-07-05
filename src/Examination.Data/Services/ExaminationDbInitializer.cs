@@ -67,7 +67,7 @@ namespace Examination.Data.Services
             {
                 string testName = Path.GetFileNameWithoutExtension(file);
                 var questions = ParseQuestions(file);
-                var test = new Test { Name = testName, Difficulty = TestDifficulty.Easy };
+                var test = new Test { Name = testName, Difficulty = TestDifficulty.Easy, ErrorThreshold = 2 };
                 test.Questions = questions;
 
                 _db.Tests.Add(test);

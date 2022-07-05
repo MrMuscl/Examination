@@ -1,0 +1,59 @@
+﻿@model Examination.WEB.Models.TestResultsViewMode
+
+@{
+    ViewData["Title"] = "TestResult";
+}
+
+<h1>TestResult</h1>
+
+<div>
+    <h4>Attestation</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Attestation.StartTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Attestation.StartTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Attestation.EndTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Attestation.EndTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Attestation.UserName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Attestation.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Test)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Test.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CorrectCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CorrectCount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IncorrectCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IncorrectCount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsPassed)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsPassed)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" asp-controller="StudentTest">Back to List</a>
+</div>
