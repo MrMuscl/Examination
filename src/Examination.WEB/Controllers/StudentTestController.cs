@@ -44,7 +44,7 @@ namespace Examination.WEB.Controllers
             IdentityUser user = _userManager.GetUserAsync(HttpContext.User).Result;
 
             // If questionNumber is null - it means that we are starting a new attestation.
-            // Else - we are continue already started attestation proceeding next/prev question.
+            // Else - we are continue already started attestation, proceeding next/prev question.
             if (questionNumber == null) 
             {
                 var attestation = new Attestation { UserName = user.UserName};
@@ -117,26 +117,7 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult TestResult(int id)
         {
-            int correctCount = 0;
-            int incorrectCount = 0;
-            var attestation = _examinationDataProvider.GetAttestationWithQuestionsAndAnswers(id);
-            var test = _examinationDataProvider.GetTest(attestation.TestId);
-            foreach (var protocol in attestation.Protocols) 
-            {
-                if (protocol.Answer.IsValid)
-                    correctCount++;
-                else
-                    incorrectCount++;
-            }
-
-            var model = new TestResultsViewMode
-            {
-                Test = test,
-                Attestation = attestation,
-                CorrectCount = correctCount,
-                IncorrectCount = incorrectCount,
-                IsPassed = incorrectCount <= test.ErrorThreshold                
-            };
+            var model = Utils.AttestationDetailsModelBuilder.Build(_examinationDataProvider, id);
 
             return View(model);
         }

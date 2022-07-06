@@ -40,9 +40,7 @@ namespace Examination.WEB.Controllers
         [HttpGet]
         public IActionResult Details(int id) 
         {
-            Attestation attestation = _examinationDataProvider.GetAttestationWithQuestionsAndAnswers(id);
-            var model = attestation.Protocols;
-            ViewBag.TestName = attestation.Test?.Name;
+            var model = Utils.AttestationDetailsModelBuilder.Build(_examinationDataProvider, id);
             
             return View(model);
         }

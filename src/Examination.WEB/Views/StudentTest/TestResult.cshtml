@@ -4,53 +4,65 @@
     ViewData["Title"] = "TestResult";
 }
 
-<h1>TestResult</h1>
+<h1>Test Result</h1>
 
 <div>
-    <h4>Attestation</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Attestation.StartTime)
+            Start time:
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Attestation.StartTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Attestation.EndTime)
+            End time:
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Attestation.EndTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Attestation.UserName)
+            User name:
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Attestation.UserName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Test)
+            Test:
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Test.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CorrectCount)
+            Total questions:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Test.Questions.Count)
+        </dd>
+        <dt class="col-sm-2">
+            Correct Answers:
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CorrectCount)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IncorrectCount)
+            Errors:
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IncorrectCount)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IsPassed)
+            Result:
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IsPassed)
+            @if (Model.IsPassed)
+            {
+                <div class="bg-success">Passed</div>
+            }
+            else
+            {
+                <div class="bg-danger">Failed</div>
+            }
         </dd>
     </dl>
 </div>

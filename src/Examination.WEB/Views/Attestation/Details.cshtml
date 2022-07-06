@@ -1,14 +1,71 @@
-﻿@model IEnumerable<Examination.Data.Models.Protocol>
+﻿@model Examination.WEB.Models.TestResultsViewMode
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Detatils of the test: @ViewBag.TestName</h1>
+<h1>Attestation details:</h1>
 
 <p>
-    
+    <dl class="row">
+        <dt class="col-sm-2">
+            Start time:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Attestation.StartTime)
+        </dd>
+        <dt class="col-sm-2">
+            End time:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Attestation.EndTime)
+        </dd>
+        <dt class="col-sm-2">
+            User name:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Attestation.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            Test:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Test.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Total questions:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Test.Questions.Count)
+        </dd>
+        <dt class="col-sm-2">
+            Correct Answers:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CorrectCount)
+        </dd>
+        <dt class="col-sm-2">
+            Errors:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IncorrectCount)
+        </dd>
+        <dt class="col-sm-2">
+            Result:
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.IsPassed)
+            {
+                <div class="bg-success">Passed</div>
+            }
+            else
+            {
+                <div class="bg-danger">Failed</div>
+            }
+        </dd>
+    </dl>
 </p>
+<h1>Protocol:</h1>
 <table class="table">
     <thead>
         <tr>
@@ -16,13 +73,13 @@
                 №
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Question)
+                Question
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Answer)
+                Answer
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Answer.IsValid)
+                Is correct
             </th>
             <th>
                 Correct answer
@@ -31,7 +88,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Attestation.Protocols)
         {
             if (item.Answer.IsValid)
             {
