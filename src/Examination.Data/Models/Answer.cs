@@ -17,6 +17,7 @@ namespace Examination.Data.Models
         public int Id { get; set; }
         //[DataType(DataType.Text)] - don't work
         //[Column(TypeName = "text")]// this works
+        [Required (ErrorMessage = "Answer should have text")]
         [StringLength(2000)]
         public string Text { get; set; }
         [Display(Name = "Is Correct")]

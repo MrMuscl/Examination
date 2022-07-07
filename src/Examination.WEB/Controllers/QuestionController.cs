@@ -32,59 +32,39 @@ namespace Examination.WEB.Controllers
         public IActionResult Add(int id) 
         {
             var test = _examinationDataProvider.GetTest(id);
-            ViewBag.Test = test;
-            return View();
+            var question = new Question();
+            question.Test = test;
+            
+            return View(question);
         }
         [HttpPost]
         public IActionResult Add(Question question, IFormCollection form)
         {
-            int testId = 0;
-            if (!Helper.GetFormIntValue(form, "TestId", out testId)) 
+            if (ModelState.IsValid) 
             {
-                var errorViewModel = new ErrorViewModel();
-                errorViewModel.Message = "Unable to resolve 'TestId' value";
-                return View("Error", errorViewModel);
+                _examinationDataProvider.AddNewQuestionToTest(question, question.TestId);
+                return RedirectToAction("Index", "AdminTest", new { Id = question.TestId });
             }
-            
-            _examinationDataProvider.AddNewQuestionToTest(question, testId);
 
-            return RedirectToAction("Index", "AdminTest", new { Id = testId });
+            var test = _examinationDataProvider.GetTest(question.TestId);
+            question.Test = test;
+
+            return View(question);
         }
 
         [HttpGet]
         public IActionResult Remove(int id, int? testId) 
         {
             var model = _examinationDataProvider.GetQuestion(id);
-            if (testId != null) 
-            {
-                ViewBag.TestId = testId.Value;
-            }
-
-            ViewBag.QuestionId = id;
             return View(model);
         }
         
         [HttpPost]
         public IActionResult Remove(Question question, IFormCollection form) 
         {
-            int questionId;
-            if (!Helper.GetFormIntValue(form, "QuestionId", out questionId)) 
-            {
-                var errorViewModel = new ErrorViewModel();
-                errorViewModel.Message = "Unable to resolve 'QuestionId' value";
-                return View("Error", errorViewModel);
-            }
+            int testId = _examinationDataProvider.GetQuestion(question.Id).TestId;
+            _examinationDataProvider.DeleteQuestion(question.Id);
             
-            int testId;
-            if (!Helper.GetFormIntValue(form, "TestId", out testId)) 
-            {
-                var errorViewModel = new ErrorViewModel();
-                errorViewModel.Message = "Unable to resolve 'TestId' value";
-                return View("Error", errorViewModel);
-            }
-            
-            _examinationDataProvider.DeleteQuestion(questionId);
-
             return RedirectToAction("Index", "Admintest", new { id = testId});
         }
 
@@ -92,28 +72,19 @@ namespace Examination.WEB.Controllers
         public IActionResult Edit(int id, int? testId)
         {
             var question = _examinationDataProvider.GetQuestion(id);
-            ViewBag.QuestionNumber = question.Number;
-
-            if (testId != null)
-            {
-                ViewBag.TestId = testId.Value;
-            }
-            
+           
             return View(question);
         }
 
         public IActionResult Edit(Question question, IFormCollection form)
         {
-            int testId;
-            Helper.GetFormIntValue(form, "TestId", out testId);
-
-            int questionNumber;
-            Helper.GetFormIntValue(form, "QuestionNumber", out questionNumber);
+            if (ModelState.IsValid) 
+            {
+                _examinationDataProvider.UpdateQuestion(question);
+                return RedirectToAction("Index", "AdminTest", new { id = question.TestId });
+            }
             
-            question.Number = questionNumber;
-            _examinationDataProvider.UpdateQuestion(question);
-
-            return RedirectToAction("Index", "AdminTest", new { id = testId });
+            return View(question);
         }
     }
 }

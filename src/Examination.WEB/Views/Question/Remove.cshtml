@@ -22,8 +22,6 @@
     <form asp-action="Remove">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" />
-        @Html.ActionLink("Back", "Index", "AdminTest", new { Id = ViewBag.TestId })
-        <input type="hidden" id="TestId" name="TestId" value="@ViewBag.TestId" />
-        <input type="hidden" id="QuestionId" name="QuestionId" value="@ViewBag.QuestionId" />
+        @Html.ActionLink("Back", "Index", "AdminTest", new { Id = Model.TestId })
     </form>
 </div>

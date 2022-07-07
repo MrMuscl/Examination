@@ -100,7 +100,7 @@ namespace Examination.Data.Services
         /// <param name="id">Answer id</param>
         /// <returns>Answer object</returns>
         Answer GetAnswer(int id);
-
+        
         /// <summary>
         /// Updaet answer with new object.
         /// </summary>

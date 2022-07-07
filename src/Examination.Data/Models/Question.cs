@@ -17,6 +17,7 @@ namespace Examination.Data.Models
         }
 
         public int Id { get; set; }
+        [Required (ErrorMessage = "Question should have text")]
         [StringLength(2000)]
         public string Text { get; set; }
         public int Number { get; set; }

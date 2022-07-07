@@ -15,6 +15,7 @@ namespace Examination.Data.Models
         }
 
         public int Id { get; set; }
+        [Required (ErrorMessage = "Name should be specified")]
         [StringLength(250)]
         public string Name { get; set; }
         public TestDifficulty? Difficulty { get; set; }

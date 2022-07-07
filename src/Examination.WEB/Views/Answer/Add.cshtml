@@ -18,14 +18,9 @@
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsValid" /> @Html.DisplayNameFor(model => model.IsValid)
-                    @if ((ViewBag.Test != null) && (ViewBag.Question != null))
-                    {
-                        <input type="hidden" id="TestId" name="TestId" value="@ViewBag.Test.Id" />
-                        <input type="hidden" id="QuestionId" name="QuestionId" value="@ViewBag.Question.Id" />
-                    }
-                </label>
+                <input class="form-check-input" asp-for="IsValid" /> @Html.DisplayNameFor(model => model.IsValid)
+                <input type="hidden" id="TestId" name="TestId" value="@Model.Question.TestId" />
+                <input type="hidden" asp-for="QuestionId" class="form-control" value="@Model.Question.Id"/>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -33,17 +28,6 @@
         </form>
     </div>
 </div>
-
 <div>
-    @if ((ViewBag.Test != null) && (ViewBag.Question != null))
-    {
-        <input type="hidden" id="TestId" name="TestId" value="@ViewBag.Test.Id" />
-        <input type="hidden" id="QuestionId" name="QuestionId" value="@ViewBag.Question.Id" />
-        @Html.ActionLink("Back","Index", "AdminTest", new { id = ViewBag.Test.Id, questionId = ViewBag.Question.Id });
-    }
-    else
-    {
-        <a asp-controller="AdminTest" asp-action="Index">Back to List</a>
-    }
+    @Html.ActionLink("Back", "Index", "AdminTest", new { id = Model.Question.Test.Id, questionId = Model.Question.Id })
 </div>
-

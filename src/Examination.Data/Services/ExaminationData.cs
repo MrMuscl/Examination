@@ -198,8 +198,12 @@ namespace Examination.Data.Services
 
         public void UpdateAnswer(Answer answer) 
         {
-            var entry = _db.Entry(answer);
-            entry.State = EntityState.Modified;
+            var target = _db.Answers.Where(a => a.Id == answer.Id).SingleOrDefault();
+            target.Text = answer.Text;
+            target.IsValid = answer.IsValid;
+
+            //var entry = _db.Entry(answer);
+            //entry.State = EntityState.Modified;
 
             _db.SaveChanges();
         }

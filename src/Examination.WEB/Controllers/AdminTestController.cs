@@ -90,9 +90,18 @@ namespace Examination.WEB.Controllers
         [HttpPost]
         public IActionResult Edit(Test test, IFormCollection form)
         {
-            _examinationDataProvider.UpdateTest(test);
+            if (test.ErrorThreshold < 0)
+            {
+                ModelState.AddModelError(nameof(test.ErrorThreshold), "Error threshold shold be not negative");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _examinationDataProvider.UpdateTest(test);
+                return RedirectToAction("Index", "AdminTest");
+            }
             
-            return RedirectToAction("Index", "AdminTest");
+            return View(test);
         }
     }
 }
