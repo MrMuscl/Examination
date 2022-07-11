@@ -13,105 +13,105 @@ namespace Examination.Data.Services
         /// Get all test objects.
         /// </summary>
         /// <returns>The collection of tests</returns>
-        IEnumerable<Test> GetTests();
+        Task<IEnumerable<Test>> GetTests();
 
         /// <summary>
         /// Get test with specified id.
         /// </summary>
         /// <param name="">Test id</param>
         /// <returns>Test object </returns>
-        Test GetTest(int id);
+        Task<Test> GetTest(int id);
         
         /// <summary>
         /// Get test with specified id include related questions.
         /// </summary>
-        /// <param name="">Test id</param>
+        /// <param name="id">Test id</param>
         /// <returns>Test object </returns>
-        Test GetTestWithQuestions(int id);
+        Task<Test> GetTestWithQuestions(int id);
 
         /// <summary>
         /// Get test with specified id include related questions and answers.
         /// </summary>
-        /// <param name="">Test id</param>
+        /// <param name="id">Test id</param>
         /// <returns>Test object </returns>
-        Test GetTestWithQuestionsAndAnswers(int id);
+        Task<Test> GetTestWithQuestionsAndAnswers(int id);
 
         /// <summary>
         /// Add test. 
         /// </summary>
         /// <param name="test">Test object that should be added</param>
-        void AddTest(Test test);
+        Task AddTest(Test test);
 
         /// <summary>
         /// Get questions for specified test.
         /// </summary>
         /// <param name="id">Test id</param>
         /// <returns>The collection of question objects</returns>
-        IEnumerable<Question> GetQuestionsForTest(int id);
+        Task<IEnumerable<Question>> GetQuestionsForTest(int id);
 
         /// <summary>
         /// Delete test with specified id.
         /// </summary>
         /// <param name="id">Test id</param>
-        void DeleteTest(int id);
+        Task DeleteTest(int id);
 
         /// <summary>
         /// Update test with new object.
         /// </summary>
         /// <param name="id">Test object</param>
-        void UpdateTest(Test test);
+        Task UpdateTest(Test test);
 
         /// <summary>
         /// Add new question to specified test.
         /// </summary>
         /// <param name="question">Question object</param>
         /// <param name="testId">Test id the question should be added to</param>
-        void AddNewQuestionToTest(Question question, int testId);
+        Task AddNewQuestionToTest(Question question, int testId);
 
         /// <summary>
         /// Get question with specifid id
         /// </summary>
         /// <param name="id">Question id</param>
         /// <returns>Question object</returns>
-        Question GetQuestion(int id);
+        Task<Question> GetQuestion(int id);
 
         /// <summary>
         /// Add new answer to specified test.
         /// </summary>
         /// <param name="answer">Answer object</param>
         /// <param name="questionId">Question id the answer should be added to</param>
-        void AddNewAnswerToQuestion(Answer answer, int questionId);
+        Task AddNewAnswerToQuestion(Answer answer, int questionId);
 
         /// <summary>
         /// Remove question enity with all related answers.
         /// </summary>
         /// <param name="questionId">Id of the question</param>
-        void DeleteQuestion(int questionId);
+        Task DeleteQuestion(int questionId);
 
         /// <summary>
         /// Update question with new object.
         /// </summary>
         /// <param name="question">Question object</param>
-        void UpdateQuestion(Question question);
+        Task UpdateQuestion(Question question);
 
         /// <summary>
         /// Get answer with specified id.
         /// </summary>
         /// <param name="id">Answer id</param>
         /// <returns>Answer object</returns>
-        Answer GetAnswer(int id);
+        Task<Answer> GetAnswer(int id);
         
         /// <summary>
         /// Updaet answer with new object.
         /// </summary>
         /// <param name="answer">Answer object</param>
-        void UpdateAnswer(Answer answer);
+        Task UpdateAnswer(Answer answer);
 
         /// <summary>
         /// Remove answer entity.
         /// </summary>
         /// <param name="answerId">Answer id</param>
-        void DeleteAnswer(int answerId);
+        Task DeleteAnswer(int answerId);
 
         /// <summary>
         /// Add new protocol. If protocol already exists - then update it.
@@ -120,13 +120,13 @@ namespace Examination.Data.Services
         /// <param name="answerId">Answer id</param>
         /// <param name="userName">Current user name</param>
         /// <returns>The id of attestation that owns the protocol</returns>
-        int AddProtocol(int questionId, int answerId, string userName);
+        Task<int> AddProtocol(int questionId, int answerId, string userName);
 
         /// <summary>
         /// Add new attestation.
         /// </summary>
         /// <param name="attestation">Attestation object</param>
-        void AddAttestation(Attestation attestation);
+        Task AddAttestation(Attestation attestation);
 
         /// <summary>
         /// Complete test. Add protocols collection to active attestation and store end date.
@@ -134,32 +134,32 @@ namespace Examination.Data.Services
         /// <param name="testId">Test id</param>
         /// <param name="userName">The name of the user, that executes test</param>
         /// If there are not aswered questions, returns the Id on the first one.
-        int CompleteTest(int testId, string userName);
+        Task<int> CompleteTest(int testId, string userName);
 
         /// <summary>
         /// Get attestation list
         /// </summary>
-        IEnumerable<Attestation> GetAttestations();
+        Task<IEnumerable<Attestation>> GetAttestations();
 
         /// <summary>
         /// Get Attestation.
         /// </summary>
         /// <param name="id">Attestation id</param>
         /// <returns>Attestation object</returns>
-        Attestation GetAttestation(int id);
+        Task<Attestation> GetAttestation(int id);
 
         /// <summary>
         /// Get Attestation with related questions and answers.
         /// </summary>
         /// <param name="id">Attestation id</param>
         /// <returns>Attestation object</returns>
-        Attestation GetAttestationWithQuestionsAndAnswers(int id);
+        Task<Attestation> GetAttestationWithQuestionsAndAnswers(int id);
         
         /// <summary>
         /// Get protocol for specified question.
         /// </summary>
         /// <param name="questionId">Question Id</param>
         /// <returns>Protocol object</returns>
-        Protocol GetProtocolForQuestion(int questionId, string userName);
+        Task<Protocol> GetProtocolForQuestion(int questionId, string userName);
     }
 }

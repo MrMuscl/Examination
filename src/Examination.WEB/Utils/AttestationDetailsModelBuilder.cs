@@ -9,12 +9,12 @@ namespace Examination.WEB.Utils
 {
     public class AttestationDetailsModelBuilder
     {
-        public static TestResultsViewMode Build(IExaminationData dataProvider, int attestationId) 
+        public static async Task<TestResultsViewMode> Build(IExaminationData dataProvider, int attestationId) 
         {
             int correctCount = 0;
             int incorrectCount = 0;
-            var attestation = dataProvider.GetAttestationWithQuestionsAndAnswers(attestationId);
-            var test = dataProvider.GetTest(attestation.TestId);
+            var attestation = await dataProvider.GetAttestationWithQuestionsAndAnswers(attestationId);
+            var test = await dataProvider.GetTest(attestation.TestId);
             foreach (var protocol in attestation.Protocols)
             {
                 if (protocol.Answer.IsValid)

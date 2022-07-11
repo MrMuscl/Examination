@@ -28,11 +28,11 @@ namespace Examination.WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult Add(int questionId, int? testId ) 
+        public async Task<IActionResult> Add(int questionId, int? testId ) 
         {
             var answer = new Answer();
-            var question = _examinationDataProvider.GetQuestion(questionId);
-            var test = _examinationDataProvider.GetTest(testId.Value);
+            var question = await _examinationDataProvider.GetQuestion(questionId);
+            var test = await _examinationDataProvider.GetTest(testId.Value);
 
             question.Test = test;
             answer.Question = question;
@@ -41,39 +41,37 @@ namespace Examination.WEB.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Answer answer, IFormCollection form) 
+        public async Task<IActionResult> Add(Answer answer, IFormCollection form) 
         {
-            int testId;
-            Helper.GetFormIntValue(form, "TestId", out testId);
+            var question = await _examinationDataProvider.GetQuestion(answer.QuestionId);
 
             if (ModelState.IsValid) 
             {
-                _examinationDataProvider.AddNewAnswerToQuestion(answer, answer.QuestionId);
-                return RedirectToAction("Index", "AdminTest", new { Id = testId, questionId = answer.QuestionId });
+                await _examinationDataProvider.AddNewAnswerToQuestion(answer, answer.QuestionId);
+                return RedirectToAction("Index", "AdminTest", new { Id = question.TestId, questionId = answer.QuestionId });
             }
-
-            var question = _examinationDataProvider.GetQuestion(answer.QuestionId);
-            question.Test = _examinationDataProvider.GetTest(question.TestId);
+                        
+            question.Test = await _examinationDataProvider.GetTest(question.TestId);
             answer.Question = question;
 
             return View(answer);
         }
 
         [HttpGet]
-        public IActionResult Edit(int id, int questionId, int testId) 
+        public async Task<IActionResult> Edit(int id, int questionId, int testId) 
         {
-            var model = _examinationDataProvider.GetAnswer(id);
+            var model = await _examinationDataProvider.GetAnswer(id);
             return View(model);
         }
         
         [HttpPost]
-        public IActionResult Edit(Answer answer, IFormCollection form) 
+        public async Task<IActionResult> Edit(Answer answer, IFormCollection form) 
         {
-            var question = _examinationDataProvider.GetQuestion(answer.QuestionId);
+            var question = await _examinationDataProvider.GetQuestion(answer.QuestionId);
 
             if (ModelState.IsValid) 
             {
-                _examinationDataProvider.UpdateAnswer(answer);
+                await _examinationDataProvider.UpdateAnswer(answer);
                 return RedirectToAction("Index", "AdminTest", new { Id = question.TestId, questionId = answer.QuestionId });
             }
             answer.Question = question;
@@ -81,18 +79,18 @@ namespace Examination.WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult Remove(int id, int questionId, int testId) 
+        public async Task<IActionResult> Remove(int id, int questionId, int testId) 
         {
-            var model = _examinationDataProvider.GetAnswer(id);
+            var model = await _examinationDataProvider.GetAnswer(id);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Remove(Answer answer, IFormCollection form) 
+        public async Task<IActionResult> Remove(Answer answer, IFormCollection form) 
         {
-            var question = _examinationDataProvider.GetQuestion(answer.QuestionId);
+            var question = await _examinationDataProvider.GetQuestion(answer.QuestionId);
 
-            _examinationDataProvider.DeleteAnswer(answer.Id);
+            await _examinationDataProvider.DeleteAnswer(answer.Id);
             return RedirectToAction("Index", "AdminTest", new { Id = question.TestId, questionId = answer.QuestionId});
         }
     }

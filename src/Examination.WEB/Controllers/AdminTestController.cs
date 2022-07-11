@@ -26,10 +26,10 @@ namespace Examination.WEB.Controllers
             _examinationDataProvider = examinationDataProvider;
         }
 
-        public IActionResult Index(int? id, int? questionId)
+        public async Task<IActionResult> Index(int? id, int? questionId)
         {
             var model = new TestsIndexViewModel();
-            model.Tests = _examinationDataProvider.GetTests();
+            model.Tests = await _examinationDataProvider.GetTests();
 
             if (id != null) 
             {
@@ -55,40 +55,40 @@ namespace Examination.WEB.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult Create(Test test)
+        public async Task<IActionResult> Create(Test test)
         {
             if (ModelState.IsValid)
             {
-                _examinationDataProvider.AddTest(test);
+                await _examinationDataProvider.AddTest(test);
                 return RedirectToAction("Index", "AdminTest");
             }
             return View();
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var model = _examinationDataProvider.GetTest(id);
+            var model = await _examinationDataProvider.GetTest(id);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Delete(int id, IFormCollection formCol)
+        public async Task<IActionResult> Delete(int id, IFormCollection formCol)
         {
-            _examinationDataProvider.DeleteTest(id);
+            await _examinationDataProvider.DeleteTest(id);
             return RedirectToAction("Index", "AdminTest");
         }
 
         
         [HttpGet]
-        public IActionResult Edit(int id) 
+        public async Task<IActionResult> Edit(int id) 
         {
-            var model = _examinationDataProvider.GetTest(id);
+            var model = await _examinationDataProvider.GetTest(id);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Edit(Test test, IFormCollection form)
+        public async Task<IActionResult> Edit(Test test, IFormCollection form)
         {
             if (test.ErrorThreshold < 0)
             {
@@ -97,7 +97,7 @@ namespace Examination.WEB.Controllers
 
             if (ModelState.IsValid)
             {
-                _examinationDataProvider.UpdateTest(test);
+                await _examinationDataProvider.UpdateTest(test);
                 return RedirectToAction("Index", "AdminTest");
             }
             

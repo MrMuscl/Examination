@@ -29,43 +29,43 @@ namespace Examination.WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult Add(int id) 
+        public async Task<IActionResult> Add(int id) 
         {
-            var test = _examinationDataProvider.GetTest(id);
+            var test = await _examinationDataProvider.GetTest(id);
             var question = new Question();
             question.Test = test;
             
             return View(question);
         }
         [HttpPost]
-        public IActionResult Add(Question question, IFormCollection form)
+        public async Task<IActionResult> Add(Question question, IFormCollection form)
         {
             if (ModelState.IsValid) 
             {
-                _examinationDataProvider.AddNewQuestionToTest(question, question.TestId);
+                await _examinationDataProvider.AddNewQuestionToTest(question, question.TestId);
                 return RedirectToAction("Index", "AdminTest", new { Id = question.TestId });
             }
 
-            var test = _examinationDataProvider.GetTest(question.TestId);
+            var test = await _examinationDataProvider.GetTest(question.TestId);
             question.Test = test;
 
             return View(question);
         }
 
         [HttpGet]
-        public IActionResult Remove(int id, int? testId) 
+        public async Task<IActionResult> Remove(int id, int? testId) 
         {
-            var model = _examinationDataProvider.GetQuestion(id);
+            var model = await _examinationDataProvider.GetQuestion(id);
+
             return View(model);
         }
         
         [HttpPost]
-        public IActionResult Remove(Question question, IFormCollection form) 
+        public async Task<IActionResult> Remove(Question question, IFormCollection form) 
         {
-            int testId = _examinationDataProvider.GetQuestion(question.Id).TestId;
-            _examinationDataProvider.DeleteQuestion(question.Id);
+            await _examinationDataProvider.DeleteQuestion(question.Id);
             
-            return RedirectToAction("Index", "Admintest", new { id = testId});
+            return RedirectToAction("Index", "Admintest", new { id = question.TestId});
         }
 
         [HttpGet]

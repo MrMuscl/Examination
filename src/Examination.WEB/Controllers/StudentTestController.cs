@@ -32,14 +32,14 @@ namespace Examination.WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var model = _examinationDataProvider.GetTests();
+            var model = await _examinationDataProvider.GetTests();
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Execute(int id, int? questionNumber) 
+        public async Task<IActionResult> Execute(int id, int? questionNumber) 
         {
             IdentityUser user = _userManager.GetUserAsync(HttpContext.User).Result;
 
@@ -51,11 +51,11 @@ namespace Examination.WEB.Controllers
                 attestation.StartTime = DateTime.Now;
                 attestation.IsActive = true;
                 attestation.TestId = id;
-                _examinationDataProvider.AddAttestation(attestation);
+                await _examinationDataProvider.AddAttestation(attestation);
             }
 
             Question question;
-            var test = _examinationDataProvider.GetTestWithQuestionsAndAnswers(id);
+            var test = await _examinationDataProvider.GetTestWithQuestionsAndAnswers(id);
             ViewBag.UserName = user.UserName;
             ViewBag.QuestionNumber = questionNumber?? 1;
             ViewBag.QuestionCount = test.Questions.Count();
@@ -70,14 +70,14 @@ namespace Examination.WEB.Controllers
                 question = test.Questions.Where(q => q.Number == questionNumber).FirstOrDefault();
             }
 
-            var protocol = _examinationDataProvider.GetProtocolForQuestion(question.Id, user.UserName);
+            var protocol = await _examinationDataProvider.GetProtocolForQuestion(question.Id, user.UserName);
             ViewBag.CheckedAnswer = protocol?.AnswerId ?? 0;
             
             return View(question);
         }
 
         [HttpPost]
-        public IActionResult Execute(string navigationBtn, IFormCollection form) 
+        public async Task<IActionResult> Execute(string navigationBtn, IFormCollection form) 
         {
             int questionNumber;
             Helper.GetFormIntValue(form, "QuestionNumber", out questionNumber);
@@ -97,15 +97,15 @@ namespace Examination.WEB.Controllers
             switch (navigationBtn) 
             {
                 case "Prev":
-                    _examinationDataProvider.AddProtocol(questionId, answerId, userName);
+                    await _examinationDataProvider.AddProtocol(questionId, answerId, userName);
                     return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber - 1 });
                 case "Next":
-                    _examinationDataProvider.AddProtocol(questionId, answerId, userName);
+                    await _examinationDataProvider.AddProtocol(questionId, answerId, userName);
                     return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = questionNumber + 1 });
                 case "Complete":
                     int attestationId;
-                    attestationId = _examinationDataProvider.AddProtocol(questionId, answerId, userName);
-                    int noAnswerNumber = _examinationDataProvider.CompleteTest(testId, userName);
+                    attestationId = await _examinationDataProvider.AddProtocol(questionId, answerId, userName);
+                    int noAnswerNumber = await _examinationDataProvider.CompleteTest(testId, userName);
                     if (noAnswerNumber > 0)
                         return RedirectToAction("Execute", "StudentTest", new { Id = testId, QuestionNumber = noAnswerNumber });
                     else

@@ -23,13 +23,13 @@ namespace Examination.WEB.Controllers
         }
         
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<AttestationItemViewModel> model = new List<AttestationItemViewModel>();
-            var attestations = _examinationDataProvider.GetAttestations();
+            var attestations = await _examinationDataProvider.GetAttestations();
             foreach (var attestation in attestations) 
             {
-                var test = _examinationDataProvider.GetTest(attestation.TestId);
+                var test = await _examinationDataProvider.GetTest(attestation.TestId);
                 var item = new AttestationItemViewModel { Attestation = attestation, Test = test };
                 model.Add(item);
             }
@@ -38,9 +38,9 @@ namespace Examination.WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int id) 
+        public async Task<IActionResult> Details(int id) 
         {
-            var model = Utils.AttestationDetailsModelBuilder.Build(_examinationDataProvider, id);
+            var model = await Utils.AttestationDetailsModelBuilder.Build(_examinationDataProvider, id);
             
             return View(model);
         }
