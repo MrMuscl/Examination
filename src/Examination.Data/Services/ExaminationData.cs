@@ -66,12 +66,21 @@ namespace Examination.Data.Services
 
         public async Task DeleteTest(int id)
         {
-            var test = await GetTest(id);
-            if (test != null)
+            var test = await GetTestWithQuestions(id);
+            if (test == null)
+                return;
+
+            string s = "";
+            if (test.Attestations.Any(a => a.Protocols.Any(p => p != null)))
             {
-                _db.Tests.Remove(test);
-                _db.SaveChanges();
+                throw new DbUpdateException($"Unable to delete {test.Name} test (Id={test.Id})" +
+                                            $" as attestations with protocols already exist for this test)");
             }
+            
+
+            _db.Tests.Remove(test);
+            await _db.SaveChangesAsync();
+            
 
         }
 
@@ -88,6 +97,7 @@ namespace Examination.Data.Services
             return await _db.Tests
                 .Where(t => t.Id == id)
                 .Include(t => t.Questions)
+                .Include(t => t.Attestations).ThenInclude(a => a.Protocols)
                 .SingleOrDefaultAsync();
         }
 
@@ -308,10 +318,10 @@ namespace Examination.Data.Services
 
         public async Task<Attestation> GetLastActiveAttestation(string userName) 
         {
-            return _db.Attestations
+            return await _db.Attestations
                 .Where(a => a.IsActive == true && a.UserName == userName)
                 .OrderByDescending(a => a.StartTime)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
                 
         public async Task<int> CompleteTest(int testId, string userName)
